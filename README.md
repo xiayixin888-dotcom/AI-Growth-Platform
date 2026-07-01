@@ -1,6 +1,6 @@
 # AI Growth Platform Demo
 
-版本：V1.0.0
+版本：V1.0.1
 
 本仓库用于存放 AI 增长平台「回传策略中心」交互 demo。
 
