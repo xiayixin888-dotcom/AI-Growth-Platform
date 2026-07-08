@@ -115,7 +115,7 @@
           </div>
           <div class="card panel">
             <div class="structure-title"><h3>分支策略</h3><button class="btn primary" onclick="addBranch()">新增分支</button></div>
-            <p class="sub">按 P1 到 Pn 判断，同一对象只命中优先级最高的一条。</p>
+            <p class="sub">同一对象可命中多个分支；同一业务转化事件仅执行最高优先级。</p>
             <div id="branchList" style="display:grid;gap:10px"></div>
           </div>
         </div>
@@ -128,21 +128,6 @@
 </div>
 
 <div class="drawer-mask" id="drawerMask" onclick="closeAllDrawers()"></div>
-<aside class="drawer" id="previewDrawer">
-  <div class="drawer-head"><h2>执行预览</h2><button class="btn" onclick="closePreview()">返回修改</button></div>
-  <div class="drawer-body">
-    <div class="card panel">
-      <h3>保存后立即生效确认</h3>
-      <p class="sub">校验通过后生成新版本；已累计成功回传数不清零，系统会按新配置重新判断已绑定对象是否需要流转。</p>
-      <div class="timeline" id="previewTimeline"></div>
-      <div class="row-actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" onclick="closePreview()">返回修改</button>
-        <button class="btn primary" onclick="confirmSave()">确认保存</button>
-      </div>
-    </div>
-  </div>
-</aside>
-
 <aside class="drawer" id="objectDrawer">
   <div class="drawer-head"><h2 id="objectTitle">对象详情</h2><button class="btn" onclick="closeObject()">关闭</button></div>
   <div class="drawer-body"><div id="objectBody"></div></div>
@@ -199,7 +184,7 @@ const corpusTags=[
 const metricFields=['广告消耗','广告点击','广告转化数','广告转化成本','落地页点击数','落地页点击率','加粉数','加粉成本','加粉率','开口数','开口成本','开口率'];
 const userAttributeFields=['新用户','老用户','落地页停留时间','加好友后未解除关系时长','加好友后多少时间内开口'];
 const conditionPools={
-  stageCondition:{'事件数量达标':events,'投放指标':metricFields,'时间段':['生效时段']},
+  stageCondition:{'事件数量达标':events,'时间段':['生效时段']},
   corpus:{'语料标签':corpusTags.map(i=>i[0])},
   userAttribute:{'用户属性':userAttributeFields},
   branch:{'策略状态':['当前阶段'],'时间段':['生效时段'],'投放指标':metricFields}
@@ -229,7 +214,7 @@ function stageTpl(n,event='点击或长按落地页组件',target=20){
   return {
     name:`第 ${n} 阶段`,desc:'',event,conversion:conversionTypes['巨量'][0],
     targetStage:`第 ${n+1} 阶段`,
-    conditionRows:[{category:'事件数量达标',field:event,countType:'成功回传数',op:'>=',value:target,logic:'或'},{category:'投放指标',field:'广告转化成本',window:'当日累计',windowHours:3,op:'<=',value:'180',logic:'或'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'或'}],conditionLogic:'或',
+    conditionRows:[{category:'事件数量达标',field:event,countType:'成功回传数',op:'>=',value:target,logic:'或'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'或'}],conditionLogic:'或',
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
     userRows:[{category:'用户属性',field:'新用户',op:'=',value:'是'}],userLogic:'且',
     devices:['iOS','Android'],apps:['aweme_lite'],
@@ -241,7 +226,7 @@ function branchTpl(n,name=`P${n} 成本异常覆盖`){
   return {
     name,enabled:true,mode:n===2?'与主线并行':'覆盖主线',
     conditions:[{category:'策略状态',field:'当前阶段',op:'=',value:n===2?'第 3 阶段':'第 2 阶段',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'},{category:'投放指标',field:'广告转化成本',window:'当日累计',windowHours:3,op:'>=',value:'180',logic:'且'}],logic:'且',
-    event:n===2?'加企微好友':'加企微好友',conversion:conversionTypes['巨量'][1],
+    event:n===2?'有效开口':'加企微好友',conversion:n===2?conversionTypes['巨量'][3]:conversionTypes['巨量'][1],
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],
     userRows:[{category:'用户属性',field:'加好友后未解除关系时长',op:'>=',value:'30'}],
     devices:['iOS','Android'],apps:['aweme_lite'],
@@ -253,18 +238,18 @@ function branchTpl(n,name=`P${n} 成本异常覆盖`){
   };
 }
 let strategies=[
-  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:6,status:'启用',updated:'2026-07-03 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动')]},
+  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:6,status:'启用',updated:'2026-07-03 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动'),branchTpl(3,'P3 同事件备用收紧')]},
   {id:'RS-6002',name:'百度账户加粉质量策略',platform:'百度',scope:'账户',objectItems:objectOptions['账户'].slice(),objects:'3 个账户',version:3,status:'启用',updated:'2026-07-03 09:42',isTemplate:false,templateName:'',copyCount:0,creator:'运营A',stages:[stageTpl(1,'点击或长按落地页组件',20),stageTpl(2,'有效开口',9999)],branches:[branchTpl(1,'P1 账户成本异常')]},
   {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',version:2,status:'停用',updated:'2026-07-02 18:20',isTemplate:true,templateName:'会话线索回传模板',copyCount:6,creator:'运营B',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传')]}
 ];
 let strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};
 let templateFilters={keyword:'',platforms:[]};
 let runtime=[
-  {id:'obj-1',strategyId:'RS-6001',object:'618 大促-信息流推广-A计划',type:'广告',stage:'第 2 阶段',progress:'加企微好友 25/30',branch:'P1 成本异常收紧',recent:'加企微好友 · 成功 · 10:31',notSent:'扣量 · 10:28',updated:'2026-07-03 10:31'},
-  {id:'obj-2',strategyId:'RS-6001',object:'618 大促-信息流推广-B计划',type:'广告',stage:'第 1 阶段',progress:'落地页互动 47/50',branch:'无',recent:'落地页互动 · 成功 · 09:42',notSent:'语料标签不满足 · 09:46',updated:'2026-07-03 09:46'},
-  {id:'obj-3',strategyId:'RS-6002',object:'百度营销-华东账户',type:'账户',stage:'第 2 阶段',progress:'有效开口今日 12',branch:'P1 账户成本异常',recent:'有效开口 · 成功 · 10:10',notSent:'窗口期超期 · 10:02',updated:'2026-07-03 10:10'}
+  {id:'obj-1',strategyId:'RS-6001',object:'618 大促-信息流推广-A计划',type:'广告',stage:'第 2 阶段',progress:'加企微好友 25/30',branch:'P1 成本异常收紧、P2 深层达标补互动',updated:'2026-07-03 10:31'},
+  {id:'obj-2',strategyId:'RS-6001',object:'618 大促-信息流推广-B计划',type:'广告',stage:'第 1 阶段',progress:'落地页互动 47/50',branch:'无',updated:'2026-07-03 09:46'},
+  {id:'obj-3',strategyId:'RS-6002',object:'百度营销-华东账户',type:'账户',stage:'第 2 阶段',progress:'有效开口今日 12',branch:'P1 账户成本异常',updated:'2026-07-03 10:10'}
 ];
-let runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};
+let runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[]};
 let logs=[
   {id:'log-1',time:'2026-07-03 10:31:22',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'主线阶段',status:'成功',reason:'媒体返回 200',object:'618 大促-信息流推广-A计划',appName:'aweme'},
   {id:'log-2',time:'2026-07-03 10:28:07',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'有效开口',source:'分支策略',status:'命中但未回传',reason:'扣量',object:'618 大促-信息流推广-A计划',appName:'aweme_lite'},
@@ -762,7 +747,7 @@ function renderBranchEditor(){
     </div></div>
     <div class="form-section">
       <div class="form-section-head">
-        <div><h3>触发条件</h3><p class="section-tip">配置命中分支的投放条件；投放指标需选择统计窗口。</p></div>
+        <div><h3>触发条件</h3><p class="section-tip">同一对象可命中多个分支；同一业务转化事件仅执行最高优先级。</p></div>
         <button class="btn small" onclick="addCondition('branch')">新增</button>
       </div>
       ${conditionBuilder(b.conditions,'branch')}
@@ -833,7 +818,7 @@ function saveStrategy(){
     if(targetStageOptionsFor(i).length && !st.targetStage)errors.push(['stage',i,`${st.name} 流转条件未选择目标阶段`]);
     st.conditionRows.forEach((r,ri)=>{
       if(r.category==='事件数量达标' && (!Number(r.value)||Number(r.value)<1))errors.push(['stage',i,`${st.name} 第 ${ri+1} 条事件数量条件必须为正整数`]);
-      if(r.category==='投放指标' && r.window==='近 N 小时' && (!Number(r.windowHours)||Number(r.windowHours)<1||Number(r.windowHours)>168))errors.push(['stage',i,`${st.name} 第 ${ri+1} 条投放指标近 N 小时必须配置 1-168 的小时数`]);
+      if(r.category==='投放指标')errors.push(['stage',i,`${st.name} 流转条件不支持投放指标，请在分支触发条件中配置`]);
     });
     if((st.deduct.m||st.deduct.n) && (!st.deduct.m||!st.deduct.n||st.deduct.n>=st.deduct.m))errors.push(['stage',i,`${st.name} 的扣量需满足 1≤N<M`]);
   });
@@ -850,25 +835,13 @@ function saveStrategy(){
     if(b.mode==='与主线并行' && b.ratioMode==='按比例回传' && !b.conditions.some(c=>c.category==='策略状态'&&c.field==='当前阶段'&&c.op==='='&&c.value))errors.push(['branch',i,`${b.name} 按比例回传时，触发条件必须选择主线阶段`]);
   });
   if(errors.length){$('errorArea').innerHTML=`<div class="error-strip"><b>保存校验未通过</b><div>${errors.map((e,idx)=>`<div>${idx+1}. <button onclick="selectNode('${e[0]}',${e[1]})">${e[2]}</button></div>`).join('')}</div></div>`;toast('请先处理保存校验错误');return}
-  $('errorArea').innerHTML='';openPreview();
-}
-function openPreview(){
-  const s=strategy();$('previewTimeline').innerHTML=[
-    ...s.stages.map((st,i)=>`<div class="time-node"><b>阶段 ${i+1}：${esc(st.name)} · ${esc(st.event)}</b><div>${stageSummary(st)}。命中但未回传原因包括扣量、窗口期、语料标签、用户属性、设备、AppName 筛选。</div></div>`),
-    ...s.branches.map((b,i)=>`<div class="time-node"><b>分支 P${i+1}：${esc(b.name)}</b><div>${b.mode}，转化事件 ${esc(b.event)}，${b.scope}；触发条件 ${b.conditions.length} 条，退出条件包含“触发条件不再满足”。</div></div>`),
-    `<div class="time-node"><b>配置变更后自动流转</b><div>保存生效后，系统按新配置重新判断已绑定对象；满足新流转条件的对象立即流转，历史成功回传数不清零。</div></div>`
-  ].join('');
-  $('drawerMask').classList.add('show');$('previewDrawer').classList.add('show');
-}
-function closePreview(){
-  $('previewDrawer').classList.remove('show');
-  if(!document.querySelector('.drawer.show')) $('drawerMask').classList.remove('show');
+  $('errorArea').innerHTML='';confirmSave();
 }
 function confirmSave(){const s=strategy();s.version+=1;s.updated='2026-07-03 现在';closeAllDrawers();closeStrategyDetail();toast(s.status==='启用'?`已保存并生效，生成 v${s.version}`:'已保存配置，停用状态下不参与新事件判断')}
 function renderRuntime(){
   renderRuntimeFilters();
   const rows=filteredRuntime();
-  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>策略组</th><th>对象类型</th><th>当前阶段</th><th>阶段进度</th><th>命中分支</th><th>最近回传</th><th>最近未回传原因</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${rows.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id}</div></td><td>${esc(strategyNameById(r.strategyId))}</td><td>${r.type}</td><td>${r.stage}</td><td>${r.progress}</td><td>${r.branch==='无'?tag('无','gray'):tag(r.branch,'orange')}</td><td>${r.recent}</td><td>${r.notSent}</td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('') || `<tr><td colspan="10"><div class="sub">暂无符合当前筛选条件的运行对象</div></td></tr>`}</tbody></table>`;
+  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>策略组</th><th>对象类型</th><th>当前阶段</th><th>阶段进度</th><th>命中分支</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${rows.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id}</div></td><td>${esc(strategyNameById(r.strategyId))}</td><td>${r.type}</td><td>${r.stage}</td><td>${r.progress}</td><td>${r.branch==='无'?tag('无','gray'):tag(r.branch,'orange')}</td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('') || `<tr><td colspan="8"><div class="sub">暂无符合当前筛选条件的运行对象</div></td></tr>`}</tbody></table>`;
 }
 function renderRuntimeFilters(){
   const box=$('runtimeFilters'); if(!box)return;
@@ -878,7 +851,6 @@ function renderRuntimeFilters(){
     <div class="field" style="width:220px"><label>对象</label>${multiDropdown('runtime_object',runtimeObjectOptions(),runtimeFilters.objects,'updateRuntimeObjectFilter')}</div>
     <div class="field" style="width:150px"><label>当前阶段</label>${multiDropdown('runtime_stage',unique(runtime.map(r=>r.stage)),runtimeFilters.stages,'updateRuntimeStageFilter')}</div>
     <div class="field" style="width:190px"><label>命中分支</label>${multiDropdown('runtime_branch',unique(runtime.map(r=>r.branch)),runtimeFilters.branches,'updateRuntimeBranchFilter')}</div>
-    <div class="field" style="width:190px"><label>最近未回传原因</label>${multiDropdown('runtime_not_sent',unique(runtime.map(r=>r.notSent.split(' · ')[0])),runtimeFilters.notSentReasons,'updateRuntimeNotSentFilter')}</div>
     <button class="btn" style="align-self:end" onclick="clearRuntimeFilters()">清空筛选</button>`;
 }
 function unique(arr){return Array.from(new Set(arr.filter(Boolean)))}
@@ -894,8 +866,7 @@ function filteredRuntime(){
     (!runtimeFilters.objectTypes.length||runtimeFilters.objectTypes.includes(r.type)) &&
     (!runtimeFilters.objects.length||runtimeFilters.objects.includes(r.object)) &&
     (!runtimeFilters.stages.length||runtimeFilters.stages.includes(r.stage)) &&
-    (!runtimeFilters.branches.length||runtimeFilters.branches.includes(r.branch)) &&
-    (!runtimeFilters.notSentReasons.length||runtimeFilters.notSentReasons.includes(r.notSent.split(' · ')[0]))
+    (!runtimeFilters.branches.length||runtimeFilters.branches.includes(r.branch))
   );
 }
 function updateRuntimeFilter(key,value,checked){runtimeFilters[key]=toggleValue(runtimeFilters[key],value,checked);renderRuntime()}
@@ -904,10 +875,9 @@ function updateRuntimeTypeFilter(value,checked){runtimeFilters.objectTypes=toggl
 function updateRuntimeObjectFilter(value,checked){updateRuntimeFilter('objects',value,checked)}
 function updateRuntimeStageFilter(value,checked){updateRuntimeFilter('stages',value,checked)}
 function updateRuntimeBranchFilter(value,checked){updateRuntimeFilter('branches',value,checked)}
-function updateRuntimeNotSentFilter(value,checked){updateRuntimeFilter('notSentReasons',value,checked)}
-function clearRuntimeFilters(){runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};renderRuntime()}
+function clearRuntimeFilters(){runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[]};renderRuntime()}
 function openRuntimeFromStrategy(id){
-  runtimeFilters={strategyGroups:id?[strategyNameById(id)]:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};
+  runtimeFilters={strategyGroups:id?[strategyNameById(id)]:[],objectTypes:[],objects:[],stages:[],branches:[]};
   switchView('runtime',navButton('runtime'));
 }
 function openLogsForObject(id){
@@ -927,10 +897,10 @@ function renderObject(){
     <div class="summary-grid">
       <div class="summary-card"><b>当前阶段</b><div>${obj.stage}</div><div class="sub">${obj.progress}</div></div>
       <div class="summary-card"><b>主线当前配置</b><div>转化事件：加企微好友</div><div class="sub">阶段流转目标 30，扣量每 3 条最后 1 条不回传</div></div>
-      <div class="summary-card"><b>命中分支</b><div>${obj.branch==='无'?tag('无','gray'):tag(obj.branch,'orange')}</div><div class="sub">同一对象同一时刻只执行最高优先级分支</div></div>
+      <div class="summary-card"><b>命中分支</b><div>${obj.branch==='无'?tag('无','gray'):tag(obj.branch,'orange')}</div><div class="sub">同一业务转化事件只执行最高优先级</div></div>
     </div>
     <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>阶段流转记录</b></div><table><thead><tr><th>时间</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>2026-07-03 10:34</td><td>${tag('配置变更后自动流转','cyan')}</td><td>因策略配置变更自动触发，从第 2 阶段进入第 3 阶段</td></tr><tr><td>2026-07-03 09:10</td><td>${tag('阶段流转','green')}</td><td>数量达标后进入第 2 阶段</td></tr></tbody></table></div>
-    <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>分支命中记录</b></div><table><thead><tr><th>时间</th><th>分支</th><th>状态</th><th>执行方式</th></tr></thead><tbody><tr><td>10:20</td><td>P1 成本异常收紧</td><td>${tag('生效中','green')}</td><td>覆盖主线</td></tr></tbody></table></div>
+    <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>分支命中记录</b></div><table><thead><tr><th>时间</th><th>分支</th><th>业务转化事件</th><th>状态</th><th>执行方式</th></tr></thead><tbody><tr><td>10:20</td><td>P1 成本异常收紧</td><td>加企微好友</td><td>${tag('生效中','green')}</td><td>覆盖主线</td></tr><tr><td>10:20</td><td>P2 深层达标补互动</td><td>有效开口</td><td>${tag('生效中','green')}</td><td>与主线并行</td></tr><tr><td>10:20</td><td>P3 同事件备用收紧</td><td>加企微好友</td><td>${tag('未执行','gray')}</td><td>同事件优先级低于 P1</td></tr></tbody></table></div>
   `;
 }
 function renderLogs(){
