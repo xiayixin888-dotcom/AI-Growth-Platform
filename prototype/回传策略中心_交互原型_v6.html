@@ -17,7 +17,7 @@
     .side{background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border-right:1px solid rgba(225,231,244,.72);padding:24px 18px;display:flex;flex-direction:column;gap:22px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px}.logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 12px 24px rgba(79,70,229,.22);display:grid;place-items:center;color:#fff}
     .nav-label{font-size:12px;color:#a0a9bb;margin:14px 10px 6px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;border-radius:14px;height:42px;text-align:left;padding:0 14px;color:#556174;display:flex;align-items:center;gap:10px}.nav button:hover{background:#f2f5ff}.nav button.active{background:linear-gradient(90deg,#eef0ff,#f7fbff);color:#4f46e5;font-weight:700;box-shadow:inset 3px 0 0 #675cff}.dot{width:18px;height:18px;border-radius:7px;border:1.5px solid currentColor;display:grid;place-items:center;font-size:10px}
-    .main{padding:22px 28px 28px;overflow:auto}.top{height:52px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.title h1{font-size:24px;margin:0 0 4px}.title p{margin:0;color:var(--muted)}.avatar{display:flex;align-items:center;gap:8px;color:#667085}.avatar span{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#c4b5fd);display:grid;place-items:center;color:#3730a3;font-weight:800}
+    .main{padding:22px 28px 28px;overflow:auto}.top{height:52px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.title-row{display:flex;align-items:center;gap:8px}.title h1{font-size:24px;margin:0}.info-icon{width:18px;height:18px;border:1px solid #cbd5e1;border-radius:50%;display:inline-grid;place-items:center;color:#64748b;background:#fff;font-size:12px;font-weight:800;cursor:help}.avatar{display:flex;align-items:center;gap:8px;color:#667085}.avatar span{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#c4b5fd);display:grid;place-items:center;color:#3730a3;font-weight:800}
     .view{display:none}.view.active{display:block}.card{background:rgba(255,255,255,.88);border:1px solid rgba(226,232,240,.78);border-radius:var(--r);box-shadow:var(--shadow)}.panel{padding:18px}.panel h2,.panel h3{margin:0 0 14px}.sub{font-size:12px;color:var(--muted)}.toolbar,.filters,.row-actions,.tabs,.chips{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar.between{justify-content:space-between}
     .cards{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:16px;margin-bottom:18px}.metric{padding:18px;display:flex;gap:14px;align-items:center}.micon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#eef2ff,#dbeafe);display:grid;place-items:center;color:#5b5cff;font-weight:800}.metric b{font-size:22px}.metric small{color:var(--green)}
     .input,.select,.textarea{width:100%;height:36px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:0 12px;color:#172033;min-width:0}.textarea{height:52px;padding:8px 12px;resize:vertical}.textarea.compact{height:36px;min-height:36px;resize:vertical}
@@ -25,11 +25,13 @@
     .table{overflow:auto}table{width:100%;border-collapse:collapse;min-width:960px}th,td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}th{color:#7b879a;font-size:12px;background:#fbfcff}tr:hover td{background:#fbfcff}.name{font-weight:700}
     .tag{display:inline-flex;align-items:center;min-height:24px;border-radius:999px;padding:2px 9px;font-size:12px;border:1px solid transparent;white-space:nowrap}.tag.blue{background:#eef2ff;color:#4f46e5;border-color:#d8defe}.tag.green{background:#ecfdf5;color:#059669;border-color:#b7ead7}.tag.orange{background:#fff7ed;color:#d97706;border-color:#fed7aa}.tag.red{background:#fef2f2;color:#dc2626;border-color:#fecaca}.tag.gray{background:#f1f5f9;color:#64748b;border-color:#e2e8f0}.tag.cyan{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
     .switch{width:38px;height:22px;border:0;border-radius:999px;background:#cbd5e1;padding:3px}.switch:before{content:"";display:block;width:16px;height:16px;background:#fff;border-radius:50%;transition:.18s}.switch.on{background:linear-gradient(135deg,var(--blue),var(--purple))}.switch.on:before{transform:translateX(16px)}
+    .template-setting{margin-top:10px;display:grid;grid-template-columns:auto minmax(260px,1fr);gap:14px;align-items:end}.switch-field{display:inline-flex;align-items:center;gap:8px;min-height:36px;white-space:nowrap}.switch-field .sub{font-size:12px}.template-setting .with-unit{min-height:36px}.template-setting .input{height:36px}
+    #strategyDetail.readonly input,#strategyDetail.readonly select,#strategyDetail.readonly textarea{pointer-events:none;background:#f8fafc;color:#64748b}#strategyDetail.readonly .multi-trigger,#strategyDetail.readonly .switch,#strategyDetail.readonly .option-card{pointer-events:none}#strategyDetail.readonly .structure-title .btn,#strategyDetail.readonly .stage-tile .row-actions,#strategyDetail.readonly .branch-actions,#strategyDetail.readonly .section-actions .btn,#strategyDetail.readonly .condition-add,#strategyDetail.readonly .row-delete,#strategyDetail.readonly .stage-delete,#strategyDetail.readonly .logic-toggle,#strategyDetail.readonly .btn.danger{display:none}
     .drawer-mask,.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.32);display:none;z-index:20}.drawer-mask.show,.modal-mask.show{display:block}.drawer{position:fixed;right:0;top:0;width:min(880px,94vw);height:100vh;background:#f8faff;z-index:30;transform:translateX(102%);transition:.2s;box-shadow:var(--shadow);display:grid;grid-template-rows:64px minmax(0,1fr)}.drawer.show{transform:none}.drawer-head{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}.drawer-body{overflow:auto;padding:18px}
-    .detail-page-head{height:52px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.strategy-top{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:center}.strategy-meta{display:flex;gap:10px;flex-wrap:wrap;color:#64748b}.editor-layout{display:grid;grid-template-columns:minmax(380px,420px) minmax(0,1fr);gap:16px;align-items:start}.structure-panel{display:grid;gap:14px;min-width:0}.structure-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.stage-rail{display:grid;gap:10px}.stage-tile{width:100%;min-width:0;border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px;text-align:left}.stage-tile.active,.branch-row.active{border-color:#7b5cff;box-shadow:0 0 0 3px rgba(123,92,255,.12)}.stage-tile h4{margin:0 0 8px}.branch-row{width:100%;min-width:0;border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}.branch-main{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;cursor:pointer}.branch-detail{min-width:0}.branch-row .chips{justify-content:flex-start}.rank{width:34px;height:34px;border-radius:12px;background:#eef2ff;color:#4f46e5;display:grid;place-items:center;font-weight:800}
-    .detail-card{min-height:680px;min-width:0}.form{display:grid;grid-template-columns:repeat(2,minmax(200px,1fr));gap:10px}.stage-form{grid-template-columns:1fr 1fr}.stage-title-input{height:40px;font-size:20px;font-weight:800}.basic-form{display:grid;grid-template-columns:1.6fr .9fr .9fr 1.5fr .8fr;gap:12px;align-items:end}.field{min-width:0}.field.span2{grid-column:span 2}.field label{display:block;color:#7b879a;font-size:12px;margin-bottom:5px}.form-section{border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px;margin-bottom:12px}.form-section h3{font-size:15px;margin-bottom:8px}.section-tip{font-size:12px;color:#64748b;margin:-2px 0 10px}.inline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.mini-card{border:1px solid #e5eaf4;border-radius:14px;background:#fff;padding:10px}
+    .detail-page-head{min-height:52px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.detail-head-left{min-width:0}.detail-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.detail-head-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}.strategy-top{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:center}.strategy-meta{display:flex;gap:8px;flex-wrap:wrap;color:#64748b}.editor-layout{display:grid;grid-template-columns:minmax(380px,420px) minmax(0,1fr);gap:16px;align-items:start}.structure-panel{display:grid;gap:14px;min-width:0}.structure-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.structure-title h3{margin:0}.structure-title .btn{align-self:center}.stage-rail{display:grid;gap:10px}.stage-tile{position:relative;width:100%;min-width:0;border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px 42px 12px 12px;text-align:left}.stage-tile.active,.branch-row.active{border-color:#7b5cff;box-shadow:0 0 0 3px rgba(123,92,255,.12)}.stage-tile h4{margin:0 0 8px}.stage-delete{position:absolute;right:10px;top:10px}.branch-row{width:100%;min-width:0;border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}.branch-main{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;cursor:pointer}.branch-detail{min-width:0}.branch-row .chips{justify-content:flex-start}.rank{width:34px;height:34px;border-radius:12px;background:#eef2ff;color:#4f46e5;display:grid;place-items:center;font-weight:800}
+    .detail-card{min-height:680px;min-width:0}.form{display:grid;grid-template-columns:repeat(2,minmax(200px,1fr));gap:10px}.stage-form{grid-template-columns:1fr 1fr}.stage-title-input{height:40px;font-size:20px;font-weight:800}.stage-head-toolbar{margin-bottom:12px}.basic-form{display:grid;grid-template-columns:1.6fr .9fr .9fr 1.5fr;gap:12px;align-items:end}.field{min-width:0}.field.span2{grid-column:span 2}.field label{display:block;color:#7b879a;font-size:12px;margin-bottom:5px}.form-section{border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:12px;margin-bottom:12px}.form-section h3{font-size:15px;margin:0}.form-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.section-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.target-inline{display:flex;align-items:center;gap:6px;color:#64748b;font-size:12px}.target-inline .select{width:112px;height:30px;border-radius:10px;padding:0 8px}.section-tip{font-size:12px;color:#64748b;margin:4px 0 0}.inline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.mini-card{border:1px solid #e5eaf4;border-radius:14px;background:#fff;padding:10px}
     .option-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.option-card{border:1px solid #dfe7fb;border-radius:14px;background:#fff;padding:12px;text-align:left}.option-card.active{border-color:#7b5cff;background:#f6f4ff;box-shadow:0 0 0 3px rgba(123,92,255,.10)}.option-card b{display:block;margin-bottom:4px}.summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.summary-card{border:1px solid #dfe7fb;border-radius:14px;background:#fff;padding:12px}.summary-card b{display:block;margin-bottom:6px}.config-platform{border:1px solid #dfe7fb;border-radius:16px;background:#fff;padding:14px}.config-platform-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.platform-tabs{display:inline-flex;gap:6px;padding:4px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc}.platform-tab{height:32px;border:0;border-radius:10px;background:transparent;color:#64748b;padding:0 16px}.platform-tab.active{background:#fff;color:#4f46e5;font-weight:800;box-shadow:0 8px 20px rgba(53,79,146,.10)}.type-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.type-check{min-height:38px;border:1px solid #edf1f7;border-radius:12px;background:#fbfdff;display:flex;align-items:center;gap:8px;padding:8px 10px}.type-check input{width:14px;height:14px}
-    .condition-builder{border:1px solid #edf1f7;border-radius:14px;background:#fcfdff;padding:10px}.condition-row{display:grid;grid-template-columns:minmax(106px,.9fr) minmax(190px,1.55fr) minmax(88px,.72fr) minmax(160px,1.15fr) auto;gap:8px;margin-bottom:8px;align-items:center}.condition-row.has-extra{grid-template-columns:minmax(106px,.9fr) minmax(170px,1.35fr) minmax(112px,.9fr) minmax(78px,.62fr) minmax(150px,1.1fr) auto}.condition-row.time-row{grid-template-columns:minmax(106px,.9fr) minmax(260px,1.8fr) auto}.time-range{display:flex;align-items:center;gap:8px}.logic-toggle{display:inline-flex;align-items:center;height:24px;border:1px solid #dbe3f0;border-radius:999px;background:#f8fafc;overflow:hidden;margin:6px 0 10px}.logic-toggle button{height:22px;border:0;background:transparent;color:#64748b;padding:0 9px}.logic-toggle button.active{background:#eef2ff;color:#4f46e5;font-weight:700}.with-unit{display:flex;align-items:center;gap:8px;white-space:nowrap}.with-unit .input{flex:1;min-width:0}.branch-actions{display:flex;gap:4px;justify-content:flex-end}.icon-btn{width:28px;height:28px;border:1px solid #dfe7fb;border-radius:10px;background:#fff;color:#4f46e5;display:grid;place-items:center;font-size:14px;line-height:1}.icon-btn:disabled{color:#cbd5e1;background:#f8fafc}.icon-btn:hover:not(:disabled){border-color:#a99cff;background:#f6f4ff}.filter-grid{display:grid;gap:10px}.multi-dropdown{position:relative}.multi-trigger{width:100%;height:36px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#172033;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}.multi-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.multi-menu{display:none;position:absolute;left:0;right:0;top:40px;z-index:12;max-height:220px;overflow:auto;border:1px solid #dfe7fb;border-radius:12px;background:#fff;box-shadow:0 14px 35px rgba(53,79,146,.16);padding:6px}.multi-dropdown.open .multi-menu{display:grid;gap:2px}.multi-option{min-height:30px;border-radius:8px;display:flex;align-items:center;gap:8px;padding:4px 8px;color:#334155}.multi-option:hover{background:#f5f7ff}.multi-option input{width:14px;height:14px}.deduct-summary{border:1px solid #dfe7fb;border-radius:14px;background:linear-gradient(135deg,#fff,#f7f9ff);padding:12px}.deduct-inline{gap:8px;flex-wrap:wrap}.deduct-time{display:flex;align-items:center;gap:8px;margin-left:auto}.preview-box{background:#fbfdff;border:1px dashed #cbd5e1;border-radius:14px;padding:12px;color:#42526a;line-height:1.8}.inline-checks{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inline-checks label{display:flex;align-items:center;gap:6px}.error-strip{border:1px solid #fed7aa;background:#fff7ed;color:#9a3412;border-radius:14px;padding:12px;margin-bottom:12px}.error-strip button{border:0;background:transparent;color:#9a3412;text-decoration:underline;cursor:pointer}.timeline{display:grid;gap:10px}.time-node{border:1px solid #dfe7fb;background:#fff;border-radius:14px;padding:12px}.time-node b{display:block;margin-bottom:4px}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.toast{position:fixed;right:24px;bottom:24px;z-index:50;background:#101828;color:#fff;border-radius:14px;padding:12px 15px;box-shadow:var(--shadow);transform:translateY(18px);opacity:0;transition:.18s}.toast.show{opacity:1;transform:none}
+    .condition-builder{border:1px solid #edf1f7;border-radius:14px;background:#fcfdff;padding:8px;overflow:hidden}.condition-row{display:grid;grid-template-columns:28px 118px minmax(300px,1fr) minmax(188px,.55fr) 58px minmax(72px,.35fr);gap:6px;margin-bottom:8px;align-items:center}.condition-row>*{min-width:0}.condition-row .select,.condition-row .input{height:34px;padding:0 8px;text-overflow:clip}.condition-row.time-row{grid-template-columns:28px 108px minmax(460px,1fr)}.condition-row.no-extra{grid-template-columns:28px 110px minmax(320px,1fr) 86px minmax(160px,.7fr)}.metric-window{display:grid;grid-template-columns:minmax(92px,1fr) auto;gap:6px;align-items:center}.metric-hours{gap:4px}.metric-hours .input{width:52px;flex:none}.row-delete{width:26px;height:26px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#94a3b8;display:grid;place-items:center;font-size:15px;line-height:1}.row-delete:hover{border-color:#fecaca;background:#fffafa;color:var(--red)}.time-range{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:6px}.logic-toggle{display:inline-flex;align-items:center;height:24px;border:1px solid #dbe3f0;border-radius:999px;background:#f8fafc;overflow:hidden;margin:6px 0 8px 34px}.logic-toggle button{height:22px;border:0;background:transparent;color:#64748b;padding:0 9px}.logic-toggle button.active{background:#eef2ff;color:#4f46e5;font-weight:700}.with-unit{display:flex;align-items:center;gap:8px;white-space:nowrap}.with-unit .input{flex:1;min-width:0}.branch-actions{display:flex;gap:4px;justify-content:flex-end}.icon-btn{width:28px;height:28px;border:1px solid #dfe7fb;border-radius:10px;background:#fff;color:#4f46e5;display:grid;place-items:center;font-size:14px;line-height:1}.icon-btn.danger{color:var(--red)}.icon-btn:disabled{color:#cbd5e1;background:#f8fafc}.icon-btn:hover:not(:disabled){border-color:#a99cff;background:#f6f4ff}.filter-grid{display:grid;gap:10px}.multi-dropdown{position:relative}.multi-trigger{width:100%;height:36px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#172033;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}.multi-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.multi-menu{display:none;position:absolute;left:0;right:0;top:40px;z-index:12;max-height:220px;overflow:auto;border:1px solid #dfe7fb;border-radius:12px;background:#fff;box-shadow:0 14px 35px rgba(53,79,146,.16);padding:6px}.multi-dropdown.open .multi-menu{display:grid;gap:2px}.multi-option{min-height:30px;border-radius:8px;display:flex;align-items:center;gap:8px;padding:4px 8px;color:#334155}.multi-option:hover{background:#f5f7ff}.multi-option input{width:14px;height:14px}.deduct-summary{border:1px solid #dfe7fb;border-radius:14px;background:linear-gradient(135deg,#fff,#f7f9ff);padding:12px}.deduct-inline{gap:8px;flex-wrap:wrap}.deduct-time{display:flex;align-items:center;gap:8px;margin-left:auto}.preview-box{background:#fbfdff;border:1px dashed #cbd5e1;border-radius:14px;padding:12px;color:#42526a;line-height:1.8}.inline-checks{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inline-checks label{display:flex;align-items:center;gap:6px}.error-strip{border:1px solid #fed7aa;background:#fff7ed;color:#9a3412;border-radius:14px;padding:12px;margin-bottom:12px}.error-strip button{border:0;background:transparent;color:#9a3412;text-decoration:underline;cursor:pointer}.timeline{display:grid;gap:10px}.time-node{border:1px solid #dfe7fb;background:#fff;border-radius:14px;padding:12px}.time-node b{display:block;margin-bottom:4px}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.toast{position:fixed;right:24px;bottom:24px;z-index:50;background:#101828;color:#fff;border-radius:14px;padding:12px 15px;box-shadow:var(--shadow);transform:translateY(18px);opacity:0;transition:.18s}.toast.show{opacity:1;transform:none}
     .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(920px,92vw);max-height:86vh;background:#fff;z-index:31;border-radius:20px;box-shadow:var(--shadow);display:none;grid-template-rows:58px 1fr 62px;overflow:hidden}.modal.show{display:grid}.modal-head,.modal-foot{padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.modal-foot{border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end;gap:10px}.modal-body{padding:18px;overflow:auto}
     @media(max-width:1100px){.app{grid-template-columns:1fr}.side{display:none}.cards,.editor-layout,.form,.basic-form,.inline-grid,.filter-grid,.option-cards,.split{grid-template-columns:1fr}.main{padding:18px}.condition-row{grid-template-columns:1fr}.field.span2{grid-column:span 1}}
   </style>
@@ -43,44 +45,37 @@
   </aside>
   <main class="main">
     <div class="top" id="globalTop">
-      <div class="title"><h1 id="pageTitle">策略管理</h1><p id="pageSub">按策略组管理主线阶段与分支策略。</p></div>
+      <div class="title"><div class="title-row"><h1 id="pageTitle">策略管理</h1><span class="info-icon" id="pageInfo" title="按策略组管理主线阶段与分支策略。">i</span></div></div>
       <div class="avatar"><span>A</span>Admin</div>
     </div>
 
     <section id="strategies" class="view active">
-      <div class="cards">
-        <div class="card metric"><div class="micon">策</div><div><div>策略组</div><b>18</b><small>启用 15</small></div></div>
-        <div class="card metric"><div class="micon">阶</div><div><div>主线阶段</div><b>46</b><small>每阶段对应 1 个转化事件</small></div></div>
-        <div class="card metric"><div class="micon">支</div><div><div>分支策略</div><b>37</b><small>生效中 9</small></div></div>
-        <div class="card metric"><div class="micon">传</div><div><div>今日成功回传</div><b>24,618</b><small>成功率 96.4%</small></div></div>
-        <div class="card metric"><div class="micon">拦</div><div><div>命中未回传</div><b>3,428</b><small>扣量 / 窗口 / 筛选</small></div></div>
-      </div>
       <div class="card panel">
         <div class="toolbar between">
-          <div class="filters">
-            <input class="input" placeholder="策略组/账户/广告/落地页 ID 或名称" style="width:280px">
-            <select class="select" style="width:120px"><option>全部平台</option><option>巨量</option><option>百度</option><option>腾讯</option></select>
-            <select class="select" style="width:130px"><option>全部对象</option><option>广告</option><option>账户</option><option>落地页</option></select>
-            <select class="select" style="width:120px"><option>全部状态</option><option>启用</option><option>停用</option></select>
-          </div>
+          <div class="filters" id="strategyFilters"></div>
           <button class="btn primary" onclick="openStrategy()">新建策略组</button>
         </div>
       </div>
       <div class="card table" id="strategyBox" style="margin-top:18px"></div>
     </section>
 
+    <section id="templates" class="view">
+      <div class="card panel">
+        <div class="filters" id="templateFilters"></div>
+      </div>
+      <div class="card table" id="templateBox" style="margin-top:18px"></div>
+    </section>
+
     <section id="runtime" class="view">
+      <div class="card panel" style="margin-bottom:18px">
+        <div class="filters" id="runtimeFilters"></div>
+      </div>
       <div class="card table" id="runtimeBox"></div>
     </section>
 
     <section id="logs" class="view">
       <div class="card panel">
-        <div class="filters">
-          <select class="select" style="width:130px"><option>全部业务事件</option><option>点击或长按落地页组件</option><option>加企微好友</option><option>加企微群</option><option>有效开口</option><option>会话线索</option></select>
-          <select class="select" style="width:130px"><option>全部状态</option><option>成功</option><option>失败</option><option>等待中</option><option>命中但未回传</option><option>未命中策略</option></select>
-          <select class="select" style="width:180px"><option>全部未回传原因</option><option>扣量</option><option>窗口期超期</option><option>语料标签不满足</option><option>用户属性不满足</option><option>设备筛选不满足</option></select>
-          <input class="input" id="logKeyword" placeholder="策略组 / 版本 / 对象" style="width:220px" oninput="logSearch=this.value;renderLogs()">
-        </div>
+        <div class="filters" id="logFilters"></div>
       </div>
       <div class="card table" id="logBox" style="margin-top:18px"></div>
     </section>
@@ -94,11 +89,16 @@
 
     <section id="strategyDetail" class="view detail-workspace">
       <div class="detail-page-head">
-        <div>
-          <h1 style="margin:0;font-size:24px">策略组详情</h1>
+        <div class="detail-head-left">
+          <div class="detail-title-row">
+            <h1 style="margin:0;font-size:24px">策略组详情</h1>
+            <div class="strategy-meta" id="detailMeta"></div>
+          </div>
           <p class="sub" style="margin:4px 0 0">左侧为主线阶段和分支策略结构，右侧为当前选中项的完整表单。</p>
         </div>
-        <div class="row-actions"><button class="btn primary" onclick="saveStrategy()">保存</button><button class="btn" onclick="closeStrategyDetail()">关闭</button></div>
+        <div class="detail-head-right">
+          <div class="row-actions" id="detailActions"></div>
+        </div>
       </div>
       <div id="errorArea"></div>
       <div class="card panel" style="margin-bottom:14px">
@@ -160,9 +160,10 @@
 const $=id=>document.getElementById(id);
 const navs=[
   ['strategies','策略管理','按策略组管理主线阶段与分支策略。','策'],
+  ['templates','模板库','复用已验证策略配置，一键复制为新策略组。','模'],
   ['runtime','运行详情','查看对象当前阶段、阶段进度和命中分支。','运'],
   ['logs','回传记录','查看单次事件命中版本、配置来源和未回传原因。','记'],
-  ['config','回传配置','维护各平台转化类型，并勾选运营常用项作为策略配置枚举。','配']
+  ['config','平台转化类型','维护各平台转化类型，并勾选运营常用项作为策略配置枚举。','配']
 ];
 const events=['点击或长按落地页组件','加企微好友','加企微群','有效开口','会话线索'];
 const conversionTypes={
@@ -198,116 +199,266 @@ const corpusTags=[
 const metricFields=['广告消耗','广告点击','广告转化数','广告转化成本','落地页点击数','落地页点击率','加粉数','加粉成本','加粉率','开口数','开口成本','开口率'];
 const userAttributeFields=['新用户','老用户','落地页停留时间','加好友后未解除关系时长','加好友后多少时间内开口'];
 const conditionPools={
-  stageCondition:{'投放指标':metricFields,'时间段':['生效时段']},
+  stageCondition:{'事件数量达标':events,'投放指标':metricFields,'时间段':['生效时段']},
   corpus:{'语料标签':corpusTags.map(i=>i[0])},
   userAttribute:{'用户属性':userAttributeFields},
   branch:{'策略状态':['当前阶段'],'时间段':['生效时段'],'投放指标':metricFields}
 };
 const deviceOptions=['iOS','Android','PC','未知'];
 const appOptions=['aweme','aweme_lite','news_article','live_stream','novelapp','空值'];
+const strategyNameMap={'RS-6001':'巨量冷启到有效开口策略','RS-6002':'百度账户加粉质量策略','RS-6003':'腾讯落地页会话线索策略'};
+const logFilterOptions={
+  strategyGroups:Object.values(strategyNameMap),
+  versions:['v2','v3','v6'],
+  objectTypes:['广告','账户','落地页'],
+  objects:['618 大促-信息流推广-A计划','618 大促-信息流推广-B计划','百度营销-华东账户'],
+  events:['点击或长按落地页组件','加企微好友','加企微群','有效开口','会话线索'],
+  statuses:['成功','失败','等待中','命中但未回传','未命中策略'],
+  reasons:['媒体返回 200','扣量','窗口期超期','语料标签不满足','对象未绑定启用策略'],
+  appNames:appOptions
+};
 const objectOptions={
   '广告':['618 大促-信息流推广-A计划','618 大促-信息流推广-B计划','华东加粉计划-0308','腾讯会话线索计划','上海新房冷启-A01','上海新房冷启-A02','苏州二手房加粉-A03','杭州改善盘-A04','南京会话线索-A05','无锡落地页互动-A06','宁波有效开口-A07','合肥新客探索-A08'],
   '账户':['巨量-华东账户','百度营销-华东账户','腾讯广告-深圳账户'],
   '落地页':['华东找房落地页','百度新房落地页','深圳二手房落地页A','上海浦东新房落地页','苏州园区改善落地页','杭州未来科技城落地页','南京河西会话落地页','无锡二手房落地页']
 };
-let selectedType='stage', selectedIndex=0, currentStrategyId='RS-6001', configPlatformTab='巨量', objectTab='progress', currentObjectId='obj-1', logSearch='';
+let selectedType='stage', selectedIndex=0, currentStrategyId='RS-6001', configPlatformTab='巨量', objectTab='progress', currentObjectId='obj-1', detailReadOnly=false, detailReturnView='strategies';
+let logFilters={strategyGroups:[],versions:[],objectTypes:[],objects:[],events:[],statuses:[],reasons:[],appNames:[]}, selectedLogIds=[];
 
 function stageTpl(n,event='点击或长按落地页组件',target=20){
   return {
     name:`第 ${n} 阶段`,desc:'',event,conversion:conversionTypes['巨量'][0],
-    flowMode:'数量达标',flowTarget:target,conditionRows:[{category:'投放指标',field:'广告转化成本',op:'<=',value:'180',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'}],conditionLogic:'且',
-    reset:n===1,corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
+    targetStage:`第 ${n+1} 阶段`,
+    conditionRows:[{category:'事件数量达标',field:event,countType:'成功回传数',op:'>=',value:target,logic:'或'},{category:'投放指标',field:'广告转化成本',window:'当日累计',windowHours:3,op:'<=',value:'180',logic:'或'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'或'}],conditionLogic:'或',
+    corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
     userRows:[{category:'用户属性',field:'新用户',op:'=',value:'是'}],userLogic:'且',
     devices:['iOS','Android'],apps:['aweme_lite'],
-    deduct:{enabled:true,expanded:false,m:3,n:1,start:'00:00',end:'23:59'},
+    deduct:{enabled:true,expanded:false,m:3,n:1},
     windowDays:event==='加企微群'||event==='会话线索'?7:'',windowHours:event==='有效开口'?24:''
   };
 }
 function branchTpl(n,name=`P${n} 成本异常覆盖`){
   return {
     name,enabled:true,mode:n===2?'与主线并行':'覆盖主线',
-    conditions:[{category:'策略状态',field:'当前阶段',op:'=',value:n===2?'第 3 阶段':'第 2 阶段',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'},{category:'投放指标',field:'广告转化成本',window:'当日累计',op:'>=',value:'180',logic:'且'}],logic:'且',
+    conditions:[{category:'策略状态',field:'当前阶段',op:'=',value:n===2?'第 3 阶段':'第 2 阶段',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'},{category:'投放指标',field:'广告转化成本',window:'当日累计',windowHours:3,op:'>=',value:'180',logic:'且'}],logic:'且',
     event:n===2?'加企微好友':'加企微好友',conversion:conversionTypes['巨量'][1],
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],
     userRows:[{category:'用户属性',field:'加好友后未解除关系时长',op:'>=',value:'30'}],
     devices:['iOS','Android'],apps:['aweme_lite'],
-    deduct:{m:2,n:1,start:'00:00',end:'23:59'},
+    deduct:{m:2,n:1},
     windowDays:'',windowHours:'',
     ratioMode:n===2?'按比例回传':'全部回传',ratioX:2,ratioY:1,
-    exit:{conditionGone:true,limit:false,limitValue:120,maxTime:false,maxHours:24},
+    exit:{conditionGone:true,limit:false,limitValue:120},
     scope:'整个策略组',objects:[]
   };
 }
 let strategies=[
-  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',resetTime:'00:00',version:6,status:'启用',updated:'2026-07-03 10:18',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动')]},
-  {id:'RS-6002',name:'百度账户加粉质量策略',platform:'百度',scope:'账户',objectItems:objectOptions['账户'].slice(),objects:'3 个账户',resetTime:'00:00',version:3,status:'启用',updated:'2026-07-03 09:42',stages:[stageTpl(1,'点击或长按落地页组件',20),stageTpl(2,'有效开口',9999)],branches:[branchTpl(1,'P1 账户成本异常')]},
-  {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',resetTime:'00:00',version:2,status:'停用',updated:'2026-07-02 18:20',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传')]}
+  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:6,status:'启用',updated:'2026-07-03 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动')]},
+  {id:'RS-6002',name:'百度账户加粉质量策略',platform:'百度',scope:'账户',objectItems:objectOptions['账户'].slice(),objects:'3 个账户',version:3,status:'启用',updated:'2026-07-03 09:42',isTemplate:false,templateName:'',copyCount:0,creator:'运营A',stages:[stageTpl(1,'点击或长按落地页组件',20),stageTpl(2,'有效开口',9999)],branches:[branchTpl(1,'P1 账户成本异常')]},
+  {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',version:2,status:'停用',updated:'2026-07-02 18:20',isTemplate:true,templateName:'会话线索回传模板',copyCount:6,creator:'运营B',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传')]}
 ];
+let strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};
+let templateFilters={keyword:'',platforms:[]};
 let runtime=[
   {id:'obj-1',strategyId:'RS-6001',object:'618 大促-信息流推广-A计划',type:'广告',stage:'第 2 阶段',progress:'加企微好友 25/30',branch:'P1 成本异常收紧',recent:'加企微好友 · 成功 · 10:31',notSent:'扣量 · 10:28',updated:'2026-07-03 10:31'},
   {id:'obj-2',strategyId:'RS-6001',object:'618 大促-信息流推广-B计划',type:'广告',stage:'第 1 阶段',progress:'落地页互动 47/50',branch:'无',recent:'落地页互动 · 成功 · 09:42',notSent:'语料标签不满足 · 09:46',updated:'2026-07-03 09:46'},
   {id:'obj-3',strategyId:'RS-6002',object:'百度营销-华东账户',type:'账户',stage:'第 2 阶段',progress:'有效开口今日 12',branch:'P1 账户成本异常',recent:'有效开口 · 成功 · 10:10',notSent:'窗口期超期 · 10:02',updated:'2026-07-03 10:10'}
 ];
+let runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};
 let logs=[
-  ['2026-07-03 10:31:22','RS-6001 v6','第 2 阶段','P1 成本异常收紧','加企微好友','主线阶段','成功','媒体返回 200','618 大促-信息流推广-A计划'],
-  ['2026-07-03 10:28:07','RS-6001 v6','第 2 阶段','P1 成本异常收紧','有效开口','分支策略','命中但未回传','扣量','618 大促-信息流推广-A计划'],
-  ['2026-07-03 10:12:40','RS-6003 v2','第 2 阶段','无','会话线索','主线阶段','命中但未回传','窗口期超期','百度营销-华东账户'],
-  ['2026-07-03 09:58:11','RS-6001 v6','第 1 阶段','无','点击或长按落地页组件','主线阶段','未命中策略','对象未绑定启用策略','618 大促-信息流推广-B计划']
+  {id:'log-1',time:'2026-07-03 10:31:22',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'主线阶段',status:'成功',reason:'媒体返回 200',object:'618 大促-信息流推广-A计划',appName:'aweme'},
+  {id:'log-2',time:'2026-07-03 10:28:07',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'有效开口',source:'分支策略',status:'命中但未回传',reason:'扣量',object:'618 大促-信息流推广-A计划',appName:'aweme_lite'},
+  {id:'log-3',time:'2026-07-03 10:12:40',strategy:'RS-6003',strategyName:strategyNameMap['RS-6003'],version:'v2',objectType:'账户',stage:'第 2 阶段',branch:'无',event:'会话线索',source:'主线阶段',status:'命中但未回传',reason:'窗口期超期',object:'百度营销-华东账户',appName:'news_article'},
+  {id:'log-4',time:'2026-07-03 09:58:11',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 1 阶段',branch:'无',event:'点击或长按落地页组件',source:'主线阶段',status:'未命中策略',reason:'对象未绑定启用策略',object:'618 大促-信息流推广-B计划',appName:'live_stream'}
 ];
 function strategy(){return strategies.find(s=>s.id===currentStrategyId)||strategies[0]}
 function tag(text,type='gray'){return `<span class="tag ${type}">${text}</span>`}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function stopReadonlyEdit(e){
+  if(detailReadOnly&&e.target.closest&&e.target.closest('#strategyDetail')){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    renderStrategyDetail();
+  }
+}
+document.addEventListener('change',stopReadonlyEdit,true);
+document.addEventListener('input',stopReadonlyEdit,true);
 function initNav(){
   $('nav').innerHTML=navs.map((n,i)=>`<button class="${i?'':'active'}" onclick="switchView('${n[0]}',this)"><span class="dot">${n[3]}</span>${n[1]}</button>`).join('');
 }
+function navButton(id){return Array.from(document.querySelectorAll('#nav button'))[navs.findIndex(n=>n[0]===id)]}
 function switchView(id,btn){
   $('globalTop').style.display='flex';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id).classList.add('active');
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  const n=navs.find(x=>x[0]===id);$('pageTitle').textContent=n[1];$('pageSub').textContent=n[2];
-  if(id==='runtime')renderRuntime(); if(id==='logs')renderLogs(); if(id==='config')renderConfig();
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));(btn||navButton(id)).classList.add('active');
+  const n=navs.find(x=>x[0]===id);$('pageTitle').textContent=n[1];$('pageInfo').title=n[2];$('pageInfo').setAttribute('aria-label',n[2]);
+  if(id==='templates')renderTemplates(); if(id==='runtime')renderRuntime(); if(id==='logs')renderLogs(); if(id==='config')renderConfig();
 }
 function showStrategyDetail(){
   $('globalTop').style.display='none';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('strategyDetail').classList.add('active');
+  $('strategyDetail').classList.toggle('readonly',detailReadOnly);
+  $('detailActions').innerHTML=`${detailReadOnly?'':`<button class="btn primary" onclick="saveStrategy()">保存</button>`}<button class="btn" onclick="closeStrategyDetail()">${detailReadOnly?'返回':'关闭'}</button>`;
   document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
-  $('pageTitle').textContent='策略组详情';
-  $('pageSub').textContent='左侧结构区与右侧详情表单固定左右排布。';
+  $('pageTitle').textContent=detailReadOnly?'模板详情':'策略组详情';
   window.scrollTo({top:0,behavior:'instant'});
 }
 function closeStrategyDetail(){
-  switchView('strategies',document.querySelectorAll('#nav button')[0]);
-  renderStrategies();
+  const returnView=detailReturnView;
+  detailReadOnly=false;
+  $('strategyDetail').classList.remove('readonly');
+  detailReturnView='strategies';
+  switchView(returnView,navButton(returnView));
+  if(returnView==='strategies')renderStrategies();
+  if(returnView==='templates')renderTemplates();
 }
 function renderStrategies(){
+  renderStrategyFilters();
+  const rows=filteredStrategies();
   $('strategyBox').innerHTML=`<table><thead><tr><th>策略组名称 / ID</th><th>平台</th><th>生效对象</th><th>阶段数</th><th>分支数</th><th>状态</th><th>当前版本</th><th>更新时间</th><th>操作</th></tr></thead><tbody>
-  ${strategies.map(s=>{s.objects=objectSummary(s);return `<tr><td><div class="name">${s.name}</div><div class="sub">${s.id}</div></td><td>${s.platform}</td><td>${s.scope} · ${s.objects}</td><td>${s.stages.length}</td><td>${s.branches.length}</td><td>${tag(s.status,s.status==='启用'?'green':'gray')}</td><td>v${s.version}</td><td>${s.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openStrategy('${s.id}')">编辑</button><button class="btn small" onclick="openRuntimeFromStrategy('${s.id}')">运行详情</button><button class="btn small" onclick="switchView('logs',document.querySelectorAll('#nav button')[2])">回传记录</button></div></td></tr>`}).join('')}
+  ${rows.map(s=>{s.objects=objectSummary(s);return `<tr><td><div class="name">${s.name}</div><div class="sub">${s.id}</div></td><td>${s.platform}</td><td>${s.scope} · ${s.objects}</td><td>${s.stages.length}</td><td>${s.branches.length}</td><td>${tag(s.status,s.status==='启用'?'green':'gray')}</td><td>v${s.version}</td><td>${s.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openStrategy('${s.id}')">编辑</button><button class="btn small" onclick="openRuntimeFromStrategy('${s.id}')">运行详情</button><button class="btn small" onclick="switchView('logs',navButton('logs'))">回传记录</button></div></td></tr>`}).join('') || `<tr><td colspan="9"><div class="sub">暂无符合当前筛选条件的策略组</div></td></tr>`}
   </tbody></table>`;
 }
+function cloneStrategy(source,fromTemplate=false){
+  const next=structuredClone(source);
+  next.id=`RS-${Math.floor(7000+Math.random()*900)}`;
+  next.name=`${fromTemplate?(source.templateName||source.name):source.name}_副本`;
+  next.status='停用';
+  next.version=1;
+  next.updated='2026-07-03 现在';
+  next.isTemplate=false;
+  next.templateName='';
+  next.copyCount=0;
+  next.creator='Admin';
+  if(fromTemplate){
+    next.objectItems=[];
+    next.objects=`0 个${next.scope}`;
+  }
+  strategies.unshift(next);
+  currentStrategyId=next.id;
+  toast(fromTemplate?'已从模板复制为停用策略组，可以去策略管理中选择生效对象':'已复制策略组');
+  renderStrategies();
+}
+function copyStrategy(id){const s=strategies.find(item=>item.id===id); if(s) cloneStrategy(s,false)}
+function toggleTemplate(id){
+  const s=strategies.find(item=>item.id===id); if(!s)return;
+  s.isTemplate=!s.isTemplate;
+  if(s.isTemplate&&!s.templateName)s.templateName=s.name;
+  toast(s.isTemplate?'已标记为模板，可在模板库复制':'已取消模板');
+  renderStrategies();
+}
+function templateRows(){return strategies.filter(s=>s.isTemplate)}
+function filteredTemplates(){
+  const kw=templateFilters.keyword.trim().toLowerCase();
+  return templateRows().filter(s=>
+    (!kw || `${s.templateName||s.name} ${s.name} ${s.id}`.toLowerCase().includes(kw)) &&
+    (!templateFilters.platforms.length || templateFilters.platforms.includes(s.platform))
+  );
+}
+function renderTemplateFilters(){
+  const box=$('templateFilters'); if(!box)return;
+  box.innerHTML=`
+    <div class="field" style="width:260px"><label>模板名称</label><input class="input" placeholder="搜索模板名称 / 来源策略组" value="${esc(templateFilters.keyword)}" oninput="templateFilters.keyword=this.value;renderTemplateTable()"></div>
+    <div class="field" style="width:150px"><label>平台</label>${multiDropdown('template_filter_platform',['巨量','百度','腾讯'],templateFilters.platforms,'updateTemplatePlatformFilter')}</div>
+    <button class="btn" style="align-self:end" onclick="clearTemplateFilters()">清空筛选</button>`;
+}
+function renderTemplates(){
+  renderTemplateFilters();
+  renderTemplateTable();
+}
+function renderTemplateTable(){
+  const rows=filteredTemplates();
+  $('templateBox').innerHTML=`<table><thead><tr><th>模板名称</th><th>来源策略组</th><th>平台</th><th>对象类型</th><th>主线阶段数</th><th>分支数</th><th>复制次数</th><th>创建人</th><th>更新时间</th><th>操作</th></tr></thead><tbody>
+  ${rows.map(s=>`<tr><td><div class="name">${esc(s.templateName||s.name)}</div></td><td>${esc(s.name)}<div class="sub">${s.id}</div></td><td>${s.platform}</td><td>${s.scope}</td><td>${s.stages.length}</td><td>${s.branches.length}</td><td>${s.copyCount||0}</td><td>${esc(s.creator||'-')}</td><td>${s.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openTemplateView('${s.id}')">查看</button><button class="btn small" onclick="copyTemplate('${s.id}')">复制</button><button class="btn small" onclick="renameTemplate('${s.id}')">重命名</button><button class="btn small danger" onclick="deleteTemplate('${s.id}')">删除</button></div></td></tr>`).join('') || `<tr><td colspan="10"><div class="sub">暂无符合当前筛选条件的模板</div></td></tr>`}
+  </tbody></table>`;
+}
+function updateTemplatePlatformFilter(value,checked){templateFilters.platforms=toggleValue(templateFilters.platforms,value,checked);renderTemplates()}
+function clearTemplateFilters(){templateFilters={keyword:'',platforms:[]};renderTemplates()}
+function copyTemplate(id){
+  const s=strategies.find(item=>item.id===id); if(!s)return;
+  s.copyCount=(s.copyCount||0)+1;
+  cloneStrategy(s,true);
+  renderTemplates();
+}
+function renameTemplate(id){
+  const s=strategies.find(item=>item.id===id); if(!s)return;
+  const name=prompt('请输入新的模板名称',s.templateName||s.name);
+  if(name&&name.trim()){s.templateName=name.trim();s.updated='2026-07-03 现在';renderTemplates();toast('模板名称已更新')}
+}
+function deleteTemplate(id){
+  const s=strategies.find(item=>item.id===id); if(!s)return;
+  if(confirm('确认删除该模板？删除后不影响来源策略组和已复制策略。')){
+    s.isTemplate=false;
+    renderTemplates();
+    toast('模板已删除，来源策略组保留');
+  }
+}
+function renderStrategyFilters(){
+  const box=$('strategyFilters'); if(!box)return;
+  box.innerHTML=`
+    <div class="field" style="width:220px"><label>策略组</label>${multiDropdown('strategy_filter_name',strategies.map(s=>s.name),strategyFilters.names,'updateStrategyNameFilter')}</div>
+    <div class="field" style="width:130px"><label>平台</label>${multiDropdown('strategy_filter_platform',['巨量','百度','腾讯'],strategyFilters.platforms,'updateStrategyPlatformFilter')}</div>
+    <div class="field" style="width:140px"><label>对象类型</label>${multiDropdown('strategy_filter_scope',['广告','账户','落地页'],strategyFilters.scopes,'updateStrategyScopeFilter')}</div>
+    <div class="field" style="width:140px"><label>状态</label>${multiDropdown('strategy_filter_status',['启用','停用'],strategyFilters.statuses,'updateStrategyStatusFilter')}</div>
+    <div class="field" style="width:220px"><label>生效对象</label>${multiDropdown('strategy_filter_object',strategyObjectFilterOptions(),strategyFilters.objects,'updateStrategyObjectFilter')}</div>
+    <button class="btn" style="align-self:end" onclick="clearStrategyFilters()">清空筛选</button>`;
+}
+function strategyObjectFilterOptions(){
+  const rows=strategyFilters.scopes.length?strategies.filter(s=>strategyFilters.scopes.includes(s.scope)):strategies;
+  return Array.from(new Set(rows.flatMap(s=>s.objectItems||[])));
+}
+function filteredStrategies(){
+  return strategies.filter(s=>
+    (!strategyFilters.names.length||strategyFilters.names.includes(s.name)) &&
+    (!strategyFilters.platforms.length||strategyFilters.platforms.includes(s.platform)) &&
+    (!strategyFilters.scopes.length||strategyFilters.scopes.includes(s.scope)) &&
+    (!strategyFilters.statuses.length||strategyFilters.statuses.includes(s.status)) &&
+    (!strategyFilters.objects.length||(s.objectItems||[]).some(o=>strategyFilters.objects.includes(o)))
+  );
+}
+function updateStrategyFilter(key,value,checked){strategyFilters[key]=toggleValue(strategyFilters[key],value,checked);renderStrategies()}
+function updateStrategyNameFilter(value,checked){updateStrategyFilter('names',value,checked)}
+function updateStrategyPlatformFilter(value,checked){updateStrategyFilter('platforms',value,checked)}
+function updateStrategyScopeFilter(value,checked){strategyFilters.scopes=toggleValue(strategyFilters.scopes,value,checked);strategyFilters.objects=strategyFilters.objects.filter(o=>strategyObjectFilterOptions().includes(o));renderStrategies()}
+function updateStrategyStatusFilter(value,checked){updateStrategyFilter('statuses',value,checked)}
+function updateStrategyObjectFilter(value,checked){updateStrategyFilter('objects',value,checked)}
+function clearStrategyFilters(){strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};renderStrategies()}
 function openStrategy(id='RS-6001'){
-  currentStrategyId=id; selectedType='stage'; selectedIndex=0; $('errorArea').innerHTML=''; showStrategyDetail(); renderStrategyDetail();
+  detailReadOnly=false; detailReturnView='strategies'; currentStrategyId=id; selectedType='stage'; selectedIndex=0; $('errorArea').innerHTML=''; showStrategyDetail(); renderStrategyDetail();
+}
+function openTemplateView(id){
+  detailReadOnly=true; detailReturnView='templates'; currentStrategyId=id; selectedType='stage'; selectedIndex=0; $('errorArea').innerHTML=''; showStrategyDetail(); renderStrategyDetail();
 }
 function closeAllDrawers(){document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('show'));$('drawerMask').classList.remove('show')}
 function objectSummary(s){return `${(s.objectItems||[]).length} 个${s.scope}`}
 function renderStrategyDetail(){
   const s=strategy(); s.objects=objectSummary(s);
+  $('detailMeta').innerHTML=`${tag(`当前版本 v${s.version}`,'gray')}${tag(s.status,s.status==='启用'?'green':'gray')}${tag(`阶段 ${s.stages.length}`,'blue')}${tag(`分支 ${s.branches.length}`,'cyan')}`;
   $('strategyBasicForm').innerHTML=`
-    <div class="toolbar between" style="margin-bottom:12px">
-      <h2 style="margin:0">策略组基本信息</h2>
-      <div class="strategy-meta">${tag(`当前版本 v${s.version}`,'gray')}${tag(s.status,s.status==='启用'?'green':'gray')}${tag(`阶段 ${s.stages.length}`,'blue')}${tag(`分支 ${s.branches.length}`,'cyan')}</div>
-    </div>
     <div class="basic-form">
       ${field('策略组名称',`<input class="input" value="${esc(s.name)}" maxlength="50" oninput="strategy().name=this.value;renderStageRail()">`)}
       ${field('平台',selectHtml(['巨量','百度','腾讯'],s.platform,`updateStrategyBasic('platform',this.value)`))}
       ${field('生效对象类型',selectHtml(['广告','账户','落地页'],s.scope,`updateStrategyScope(this.value)`))}
       ${field(`生效对象（${objectSummary(s)}）`,objectMultiSelect(s))}
-      ${field('重置转化计数',`<input class="input" type="time" value="${s.resetTime||'00:00'}" onchange="updateStrategyBasic('resetTime',this.value)">`)}
+    </div>
+    <div class="template-setting">
+      <div class="switch-field">
+        <span class="sub">设为模板</span><button class="switch ${s.isTemplate?'on':''}" onclick="setTemplateFlag(${!s.isTemplate})"></button>
+      </div>
+      <div class="with-unit"><span class="sub">模板名称</span><input class="input" value="${esc(s.templateName||s.name)}" ${s.isTemplate?'':'disabled'} maxlength="50" oninput="strategy().templateName=this.value"></div>
     </div>`;
   renderStageRail(); renderBranchList(); renderEditor();
 }
 function updateStrategyBasic(key,value){strategy()[key]=value;renderStrategyDetail()}
+function setTemplateFlag(checked){
+  const s=strategy();
+  s.isTemplate=checked;
+  if(checked&&!s.templateName)s.templateName=s.name;
+  if(!checked)s.templateName='';
+  renderStrategyDetail();
+}
 function updateStrategyScope(value){
   const s=strategy(); s.scope=value; s.objectItems=objectOptions[value].slice(); s.objects=objectSummary(s); renderStrategyDetail();
 }
@@ -320,17 +471,18 @@ function updateStrategyObjects(value,checked){
 }
 function stageSummary(st){
   const hasDeduct=st.deduct.m&&st.deduct.n&&st.deduct.n<st.deduct.m;
-  if(st.flowMode==='数量达标') return `阶段流转目标 ${st.flowTarget || '-'}，扣量 ${hasDeduct?`每 ${st.deduct.m} 条扣 ${st.deduct.n} 条`:'未配置'}`;
-  return `条件达标流转，${st.conditionRows.length} 条条件`;
+  return `流转条件 ${st.conditionRows.length} 条，扣量 ${hasDeduct?`每 ${st.deduct.m} 条扣 ${st.deduct.n} 条`:'未配置'}`;
 }
 function renderStageRail(){
-  const s=strategy(); $('stageRail').innerHTML=s.stages.map((st,i)=>`<button class="stage-tile ${selectedType==='stage'&&selectedIndex===i?'active':''}" onclick="selectNode('stage',${i})">
-    <h4>${esc(st.name)}</h4><div class="sub">${esc(st.event)}</div><div class="sub">${esc(st.conversion)}</div><div class="sub">${stageSummary(st)}</div></button>`).join('') || `<div class="sub">该策略组暂无阶段，点击左侧新增阶段</div>`;
+  const s=strategy(); $('stageRail').innerHTML=s.stages.map((st,i)=>`<div class="stage-tile ${selectedType==='stage'&&selectedIndex===i?'active':''}">
+    <button style="all:unset;display:block;width:100%;cursor:pointer" onclick="selectNode('stage',${i})"><h4>${esc(st.name)}</h4><div class="sub">${esc(st.event)}</div><div class="sub">${esc(st.conversion)}</div><div class="sub">${stageSummary(st)}</div></button>
+    <button class="icon-btn danger stage-delete" title="删除阶段" onclick="deleteStage(${i})" ${s.stages.length<=1?'disabled':''}>×</button>
+  </div>`).join('') || `<div class="sub">该策略组暂无阶段，点击左侧新增阶段</div>`;
 }
 function renderBranchList(){
   const s=strategy(); $('branchList').innerHTML=s.branches.map((b,i)=>`<div class="branch-row ${selectedType==='branch'&&selectedIndex===i?'active':''}">
     <div class="branch-main" onclick="selectNode('branch',${i})"><span class="rank">P${i+1}</span><span class="branch-detail"><b>${esc(b.name)}</b><div class="sub">${b.mode} · ${esc(b.event)} · ${b.scope}</div><div class="chips">${tag(b.enabled?'启用':'停用',b.enabled?'green':'gray')}${tag(`${b.conditions.length} 条触发条件`,'blue')}</div></span></div>
-    <div class="branch-actions"><button class="icon-btn" title="上移" onclick="moveBranch(${i},-1)" ${i===0?'disabled':''}>↑</button><button class="icon-btn" title="下移" onclick="moveBranch(${i},1)" ${i===s.branches.length-1?'disabled':''}>↓</button></div>
+    <div class="branch-actions"><button class="icon-btn" title="上移" onclick="moveBranch(${i},-1)" ${i===0?'disabled':''}>↑</button><button class="icon-btn" title="下移" onclick="moveBranch(${i},1)" ${i===s.branches.length-1?'disabled':''}>↓</button><button class="icon-btn danger" title="删除" onclick="deleteBranch(${i})">×</button></div>
   </div>`).join('') || `<div class="sub">暂无分支策略，点击左侧新增分支</div>`;
 }
 function selectNode(type,i){selectedType=type;selectedIndex=i;renderStrategyDetail()}
@@ -341,7 +493,7 @@ function renderEditor(){
   const st=s.stages[selectedIndex]; if(!st){$('editorForm').innerHTML='<div class="sub">该策略组暂无阶段，点击左侧新增阶段。</div>';return}
   const special=eventSpecial[st.event];
   $('editorForm').innerHTML=`
-    <div class="toolbar between">
+    <div class="toolbar between stage-head-toolbar">
       <div style="min-width:320px;max-width:520px;width:52%">
         <input class="input stage-title-input" value="${esc(st.name)}" oninput="strategy().stages[selectedIndex].name=this.value;renderStageRail()">
       </div>
@@ -350,20 +502,19 @@ function renderEditor(){
     <div class="form-section"><h3>阶段基础信息</h3><div class="form stage-form">
       ${field('转化事件',selectHtml(events,st.event,`setStageEvent(this.value)`))}
       ${field('平台转化类型',selectHtml(conversionTypes[s.platform],st.conversion,`strategy().stages[selectedIndex].conversion=this.value;renderStageRail()`))}
-      ${field('重置转化计数',`<button class="switch ${st.reset?'on':''}" onclick="toggleReset()"></button><span class="sub" style="margin-left:8px">同一策略组最多一个阶段开启</span>`)}
       ${field('阶段说明',`<textarea class="textarea compact" oninput="strategy().stages[selectedIndex].desc=this.value">${esc(st.desc)}</textarea>`)}
     </div></div>
-    <div class="form-section"><h3>流转判断方式</h3><div class="option-cards">
-      ${optionCard('数量达标','累计成功回传达到阶段流转目标后进入下一阶段',st.flowMode==='数量达标',`updateStage('flowMode','数量达标')`)}
-      ${optionCard('条件达标','使用条件构造器判断，达标后进入下一阶段',st.flowMode==='条件达标',`updateStage('flowMode','条件达标')`)}
+    <div class="form-section">
+      <div class="form-section-head">
+        <div><h3>流转条件</h3><p class="section-tip">条件组命中后进入统一目标阶段。</p></div>
+        <div class="section-actions">${stageTargetControl(st)}<button class="btn small" onclick="addCondition('stageCondition')">新增</button></div>
+      </div>
+      ${conditionBuilder(st.conditionRows,'stageCondition')}
     </div>
-    <div style="margin-top:12px">${st.flowMode==='数量达标'
-      ? `<div class="form">${field('阶段流转目标',`<input class="input" type="number" min="1" value="${st.flowTarget}" oninput="strategy().stages[selectedIndex].flowTarget=Number(this.value)">`)}</div>`
-      : `${conditionBuilder(st.conditionRows,'stageCondition')}`}</div></div>
     <div class="form-section"><h3>筛选条件</h3>
       <div class="filter-grid">
-        ${filterBox('语料标签筛选',st.corpusRows.length,conditionBuilder(st.corpusRows,'corpus'))}
-        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'))}
+        ${filterBox('语料标签筛选',st.corpusRows.length,conditionBuilder(st.corpusRows,'corpus'),'corpus')}
+        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'),'userAttribute')}
         ${filterBox('设备筛选',st.devices.length,deviceSelector(st))}
         ${filterBox('排除访问应用',st.apps.length,appSelector(st))}
       </div>
@@ -373,8 +524,9 @@ function renderEditor(){
   `;
 }
 function field(label,control,span=''){return `<div class="field ${span}"><label>${label}</label>${control}</div>`}
-function selectHtml(list,value,onchange){return `<select class="select" onchange="${onchange}">${list.map(i=>`<option ${i===value?'selected':''}>${esc(i)}</option>`).join('')}</select>`}
-function unitInput(oninput,value,unit){return `<div class="with-unit"><input class="input" type="number" min="0" value="${esc(value)}" oninput="${oninput}"><span class="sub">${unit}</span></div>`}
+function disabledAttr(){return detailReadOnly?'disabled':''}
+function selectHtml(list,value,onchange){return `<select class="select" ${disabledAttr()} onchange="${onchange}">${list.map(i=>`<option ${i===value?'selected':''}>${esc(i)}</option>`).join('')}</select>`}
+function unitInput(oninput,value,unit){return `<div class="with-unit"><input class="input" type="number" min="0" value="${esc(value)}" ${disabledAttr()} oninput="${oninput}"><span class="sub">${unit}</span></div>`}
 function corpusValueOptions(field){
   const hit=corpusTags.find(i=>i[0]===field);
   return hit ? hit[1].split('、') : [];
@@ -391,8 +543,8 @@ function compactList(values,emptyText='请选择'){
 function multiDropdown(id,options,selected,handler){
   const safeId=`md_${id}`;
   return `<div class="multi-dropdown" id="${safeId}">
-    <button type="button" class="multi-trigger" onclick="toggleMultiDropdown('${safeId}')"><span>${esc(compactList(selected))}</span><b>⌄</b></button>
-    <div class="multi-menu">${options.map(o=>`<label class="multi-option"><input type="checkbox" ${selected.includes(o)?'checked':''} onchange="${handler}('${esc(o)}',this.checked)"><span>${esc(o)}</span></label>`).join('')}</div>
+    <button type="button" class="multi-trigger" ${disabledAttr()} onclick="toggleMultiDropdown('${safeId}')"><span>${esc(compactList(selected))}</span><b>⌄</b></button>
+    <div class="multi-menu"><input class="input" placeholder="搜索" style="height:30px;margin:2px 0 6px" oninput="filterMultiOptions('${safeId}',this.value)">${options.map(o=>`<label class="multi-option" data-label="${esc(o)}"><input type="checkbox" ${selected.includes(o)?'checked':''} onchange="${handler}('${esc(o)}',this.checked)"><span>${esc(o)}</span></label>`).join('')}</div>
   </div>`;
 }
 function toggleMultiDropdown(id){
@@ -404,14 +556,23 @@ function toggleValue(list,value,checked){
   checked?next.add(value):next.delete(value);
   return Array.from(next);
 }
+function filterMultiOptions(id,keyword){
+  const kw=keyword.trim().toLowerCase();
+  document.querySelectorAll(`#${id} .multi-option`).forEach(el=>{
+    el.style.display=(el.dataset.label||'').toLowerCase().includes(kw)?'flex':'none';
+  });
+}
 function optionCard(title,desc,active,onclick){return `<button class="option-card ${active?'active':''}" onclick="${onclick}"><b>${title}</b><span class="sub">${desc}</span></button>`}
-function filterBox(title,count,body){return `<div class="mini-card"><div class="toolbar between" style="margin-bottom:8px"><b>${title}</b>${tag(`已配置 ${count} 项`,'gray')}</div>${body}</div>`}
+function conditionAddButton(type){return type&&!detailReadOnly?`<button class="btn small condition-add" onclick="addCondition('${type}')">新增</button>`:''}
+function filterBox(title,count,body,type){return `<div class="mini-card"><div class="toolbar between" style="margin-bottom:8px"><b>${title}</b><div class="row-actions">${tag(`已配置 ${count} 项`,'gray')}${conditionAddButton(type)}</div></div>${body}</div>`}
+function conditionPanel(title,count,type,body){return `<div class="mini-card"><div class="toolbar between" style="margin-bottom:8px"><b>${title}</b><div class="row-actions">${tag(`已配置 ${count} 项`,'gray')}${conditionAddButton(type)}</div></div>${body}</div>`}
 function conditionBuilder(rows,type){
   const poolType=type==='branchCorpus'?'corpus':type==='branchUserAttribute'?'userAttribute':type;
   const pool=conditionPools[poolType]||conditionPools.stageCondition;
-  return `<div class="condition-builder">${rows.map((r,i)=>`
+  return `<div class="condition-builder">${rows.length?rows.map((r,i)=>`
     ${i?logicToggle(r.logic||'且',`setConditionLogic('${type}',${i},`) : ''}
     <div class="condition-row ${conditionRowClass(r)}">
+      <button class="row-delete" title="删除" onclick="deleteCondition('${type}',${i})">×</button>
       ${selectHtml(Object.keys(pool),r.category,`updateCondition('${type}',${i},'category',this.value)`)}
       ${r.category==='时间段' ? conditionValueControl(type,r,i) : `
         ${selectHtml(pool[r.category]||Object.values(pool)[0],r.field,`updateCondition('${type}',${i},'field',this.value)`)}
@@ -419,11 +580,10 @@ function conditionBuilder(rows,type){
         ${selectHtml(conditionOps(type,r),r.op,`updateCondition('${type}',${i},'op',this.value)`)}
         ${conditionValueControl(type,r,i)}
       `}
-      <button class="btn small" onclick="addCondition('${type}')">新增条件</button>
-    </div>`).join('')}</div>`;
+    </div>`).join(''):`<div class="sub">暂无条件，保存前至少新增 1 条。</div>`}</div>`;
 }
 function conditionRowClass(r){
-  if(r.category==='投放指标') return 'has-extra';
+  if(r.category==='投放指标'||r.category==='事件数量达标') return 'has-extra';
   if(r.category==='时间段') return 'time-row';
   return 'no-extra';
 }
@@ -432,6 +592,7 @@ function logicToggle(value,handlerPrefix){
 }
 function conditionOps(type,r){
   if(r.category==='时间段') return ['在时间段内'];
+  if(r.category==='事件数量达标') return ['>=','>','=','<=','<'];
   if(r.category==='投放指标') return ['>','>=','<','<=','='];
   if(r.category==='策略状态') return ['=','!='];
   if(type==='corpus'||type==='branchCorpus') return ['包含','不包含'];
@@ -439,8 +600,24 @@ function conditionOps(type,r){
   return ['>','>=','<','<=','='];
 }
 function conditionExtraControl(type,r,i){
-  if(r.category==='投放指标') return selectHtml(['当日累计','近 N 小时'],r.window||'当日累计',`updateCondition('${type}',${i},'window',this.value)`);
+  if(r.category==='事件数量达标') return selectHtml(['成功回传数','事件发生数'],r.countType||'成功回传数',`updateCondition('${type}',${i},'countType',this.value)`);
+  if(r.category==='投放指标') return `<div class="metric-window">${selectHtml(['当日累计','近 N 小时'],r.window||'当日累计',`updateCondition('${type}',${i},'window',this.value)`)}${r.window==='近 N 小时'?`<div class="with-unit metric-hours"><input class="input" type="number" min="1" max="168" value="${esc(r.windowHours||3)}" ${disabledAttr()} oninput="updateCondition('${type}',${i},'windowHours',this.value)"><span class="sub">小时</span></div>`:''}</div>`;
   return '';
+}
+function targetStageOptions(){
+  const s=strategy();
+  if(selectedType!=='stage') return [];
+  return targetStageOptionsFor(selectedIndex);
+}
+function targetStageOptionsFor(stageIndex){
+  return strategy().stages.slice(stageIndex+1).map(st=>st.name);
+}
+function stageTargetControl(st){
+  const options=targetStageOptions();
+  if(!options.length) return `<span class="sub">无后续阶段</span>`;
+  const value=options.includes(st.targetStage)?st.targetStage:options[0];
+  if(st.targetStage!==value) st.targetStage=value;
+  return `<label class="target-inline">命中后进入 ${selectHtml(options,value,`strategy().stages[selectedIndex].targetStage=this.value`)}</label>`;
 }
 function conditionValueControl(type,r,i){
   if(r.category==='时间段') return timeRangeControl(type,r,i);
@@ -454,7 +631,7 @@ function conditionValueControl(type,r,i){
     const unit=userAttributeUnit(r.field);
     if(unit) return unitInput(`updateCondition('${type}',${i},'value',this.value)`,r.value,unit);
   }
-  return `<input class="input" value="${esc(r.value)}" oninput="updateCondition('${type}',${i},'value',this.value)">`;
+  return `<input class="input" value="${esc(r.value)}" ${disabledAttr()} oninput="updateCondition('${type}',${i},'value',this.value)">`;
 }
 function hourOptions(selected,start=0,end=24){
   const arr=[];
@@ -466,7 +643,7 @@ function hourOptions(selected,start=0,end=24){
 }
 function timeRangeControl(type,r,i){
   const start=r.start||'09:00', end=r.end||'18:00';
-  return `<div class="time-range"><select class="select" onchange="updateCondition('${type}',${i},'start',this.value)">${hourOptions(start,0,23)}</select><span class="sub">至</span><select class="select" onchange="updateCondition('${type}',${i},'end',this.value)">${hourOptions(end,1,24)}</select></div>`;
+  return `<div class="time-range"><select class="select" ${disabledAttr()} onchange="updateCondition('${type}',${i},'start',this.value)">${hourOptions(start,0,23)}</select><span class="sub">至</span><select class="select" ${disabledAttr()} onchange="updateCondition('${type}',${i},'end',this.value)">${hourOptions(end,1,24)}</select></div>`;
 }
 function conditionRows(type){
   if(type==='branch')return strategy().branches[selectedIndex].conditions;
@@ -483,6 +660,8 @@ function updateCondition(type,i,key,value){
   if(key==='category')rows[i].field=(pool[value]||Object.values(pool)[0]||[''])[0];
   if(key==='category'||key==='field'){
     rows[i].window=rows[i].category==='投放指标'?(rows[i].window||'当日累计'):'';
+    rows[i].windowHours=rows[i].category==='投放指标'?(rows[i].windowHours||3):'';
+    rows[i].countType=rows[i].category==='事件数量达标'?(rows[i].countType||'成功回传数'):'';
     if(rows[i].category==='时间段'){
       rows[i].op='在时间段内';
       rows[i].start=rows[i].start||'09:00';
@@ -495,6 +674,13 @@ function updateCondition(type,i,key,value){
       if(rows[i].field==='新用户'||rows[i].field==='老用户') rows[i].value='是';
       else if(unit) rows[i].value=rows[i].value||'30';
     }
+    if(rows[i].category==='事件数量达标'){
+      rows[i].op=rows[i].op||'>=';
+      rows[i].value=rows[i].value||'10';
+    }
+  }
+  if(key==='window'){
+    rows[i].windowHours=value==='近 N 小时'?(rows[i].windowHours||3):'';
   }
   if(key==='start'||key==='end') rows[i].value=`${rows[i].start||'09:00'}-${rows[i].end||'18:00'}`;
   renderStrategyDetail();
@@ -504,10 +690,11 @@ function addCondition(type){
   const rows=conditionRows(type), pool=conditionPools[poolType]||conditionPools.stageCondition;
   const category=Object.keys(pool)[0], field=(pool[category]||[''])[0];
   const isTime=category==='时间段';
-  const value=category==='策略状态'?'第 1 阶段':isTime?'09:00-18:00':poolType==='corpus'?(corpusValueOptions(field)[0]||''):poolType==='userAttribute'?(field==='新用户'||field==='老用户'?'是':'30'):'1000';
-  rows.push({category,field,window:category==='投放指标'?'当日累计':'',op:isTime?'在时间段内':poolType==='corpus'?'包含':category==='策略状态'||poolType==='userAttribute'?'=':'>=',value,start:isTime?'09:00':'',end:isTime?'18:00':'',logic:'且'});
+  const value=category==='策略状态'?'第 1 阶段':isTime?'09:00-18:00':poolType==='corpus'?(corpusValueOptions(field)[0]||''):poolType==='userAttribute'?(field==='新用户'||field==='老用户'?'是':'30'):'10';
+  rows.push({category,field,window:category==='投放指标'?'当日累计':'',windowHours:category==='投放指标'?3:'',countType:category==='事件数量达标'?'成功回传数':'',op:isTime?'在时间段内':poolType==='corpus'?'包含':category==='策略状态'||poolType==='userAttribute'?'=':'>=',value,start:isTime?'09:00':'',end:isTime?'18:00':'',logic:'且'});
   renderStrategyDetail();
 }
+function deleteCondition(type,i){if(!confirm('确认删除这条条件？'))return;conditionRows(type).splice(i,1);renderStrategyDetail()}
 function setConditionLogic(type,i,value){conditionRows(type)[i].logic=value;renderStrategyDetail()}
 function deviceSelector(st){return multiDropdown(`devices_${selectedIndex}`,deviceOptions,st.devices,'updateStageMultiDevices')}
 function appSelector(st){return multiDropdown(`apps_${selectedIndex}`,appOptions,st.apps,'updateStageMultiApps')}
@@ -518,14 +705,12 @@ function branchAppSelector(b){return multiDropdown(`branch_apps_${selectedIndex}
 function updateBranchDevices(value,checked){const b=strategy().branches[selectedIndex];b.devices=toggleValue(b.devices||[],value,checked);renderStrategyDetail()}
 function updateBranchApps(value,checked){const b=strategy().branches[selectedIndex];b.apps=toggleValue(b.apps||[],value,checked);renderStrategyDetail()}
 function branchDeductEditor(b){
-  const d=b.deduct||{m:2,n:1,start:'00:00',end:'23:59'};
+  const d=b.deduct||{m:2,n:1};
   return `<div class="deduct-summary">
     <div class="row-actions deduct-inline">
       <span>每</span><input class="input" style="width:88px" type="number" min="2" value="${d.m}" oninput="strategy().branches[selectedIndex].deduct.m=Number(this.value)">
       <span>条，最后</span><input class="input" style="width:88px" type="number" min="1" value="${d.n}" oninput="strategy().branches[selectedIndex].deduct.n=Number(this.value)">
       <span>条不回传</span>
-      <span class="deduct-time"><span class="sub">生效时段</span><input class="input" style="width:140px" type="time" value="${d.start}" oninput="strategy().branches[selectedIndex].deduct.start=this.value">
-      <span>-</span><input class="input" style="width:140px" type="time" value="${d.end}" oninput="strategy().branches[selectedIndex].deduct.end=this.value"></span>
     </div>
   </div>`;
 }
@@ -533,33 +718,55 @@ function deductEditor(d){
   return `<div class="deduct-summary">
     <div class="form">
       ${field('扣量规则',`<div class="row-actions"><span>每</span><input class="input" style="width:88px" type="number" min="2" value="${d.m}" oninput="strategy().stages[selectedIndex].deduct.m=Number(this.value);renderStageRail()"><span>条，最后</span><input class="input" style="width:88px" type="number" min="1" value="${d.n}" oninput="strategy().stages[selectedIndex].deduct.n=Number(this.value);renderStageRail()"><span>条不回传</span></div>`,'span2')}
-      ${field('生效开始',`<input class="input" type="time" value="${d.start}" oninput="strategy().stages[selectedIndex].deduct.start=this.value">`)}
-      ${field('生效结束',`<input class="input" type="time" value="${d.end}" oninput="strategy().stages[selectedIndex].deduct.end=this.value">`)}
     </div>
   </div>`;
 }
-function toggleReset(){strategy().stages.forEach((s,i)=>s.reset=i===selectedIndex?!s.reset:false);renderStrategyDetail()}
 function addStage(){const s=strategy();s.stages.push(stageTpl(s.stages.length+1,'点击或长按落地页组件',10));selectedType='stage';selectedIndex=s.stages.length-1;renderStrategyDetail()}
 function deleteStageButton(s){
-  if(selectedIndex===0||selectedIndex!==s.stages.length-1) return '';
-  return `<button class="btn danger" onclick="deleteLastStage()">删除阶段</button>`;
+  if(s.stages.length<=1) return '';
+  return `<button class="btn danger" onclick="deleteStage(selectedIndex)">删除阶段</button>`;
 }
-function deleteLastStage(){const s=strategy();if(selectedIndex===s.stages.length-1&&selectedIndex>0){s.stages.pop();selectedIndex=s.stages.length-1;renderStrategyDetail();toast('已删除阶段，保存后生效')}}
+function deleteStage(index){
+  const s=strategy();
+  if(s.stages.length<=1){toast('至少保留 1 个主线阶段');return}
+  if(!confirm('确认删除该阶段？删除后该阶段下的转化事件、流转条件和筛选条件都会移除。'))return;
+  s.stages.splice(index,1);
+  selectedType='stage';
+  selectedIndex=Math.max(0,Math.min(index,s.stages.length-1));
+  renderStrategyDetail();
+  toast('已删除阶段，保存后生效');
+}
 function addBranch(){const s=strategy();s.branches.push(branchTpl(s.branches.length+1));selectedType='branch';selectedIndex=s.branches.length-1;renderStrategyDetail()}
+function deleteBranch(index){
+  const s=strategy();
+  if(!confirm('确认删除该分支？删除后该分支的触发条件和回传配置都会移除。'))return;
+  s.branches.splice(index,1);
+  selectedType=s.branches.length?'branch':'stage';
+  selectedIndex=s.branches.length?Math.max(0,Math.min(index-1,s.branches.length-1)):0;
+  renderStrategyDetail();
+  toast('已删除分支，保存后生效');
+}
 function renderBranchEditor(){
   const s=strategy(), b=s.branches[selectedIndex];
+  if(!b){$('editorForm').innerHTML='<div class="sub">该策略组暂无分支，点击左侧新增分支。</div>';return}
   $('editorForm').innerHTML=`
     <div class="toolbar between" style="margin-bottom:12px">
       <div style="min-width:360px;max-width:520px;width:52%">
         <input class="input" style="height:40px;font-size:20px;font-weight:800" value="${esc(b.name)}" oninput="strategy().branches[selectedIndex].name=this.value;renderBranchList()">
       </div>
-      <div class="row-actions">${tag(b.enabled?'启用':'停用',b.enabled?'green':'gray')}<button class="switch ${b.enabled?'on':''}" onclick="bToggle()"></button></div>
+      <div class="row-actions">${tag(b.enabled?'启用':'停用',b.enabled?'green':'gray')}<button class="switch ${b.enabled?'on':''}" onclick="bToggle()"></button><button class="btn danger" onclick="deleteBranch(selectedIndex)">删除分支</button></div>
     </div>
     <div class="form-section"><h3>执行方式</h3><div class="option-cards">
       ${optionCard('覆盖主线','暂停当前主线阶段，按分支配置执行',b.mode==='覆盖主线',`setBranch('mode','覆盖主线')`)}
       ${optionCard('与主线并行','主线照常回传，分支额外回传且计数独立',b.mode==='与主线并行',`setBranch('mode','与主线并行')`)}
     </div></div>
-    <div class="form-section"><h3>触发条件</h3><p class="section-tip">配置命中分支的投放条件；投放指标需选择统计窗口。</p>${conditionBuilder(b.conditions,'branch')}</div>
+    <div class="form-section">
+      <div class="form-section-head">
+        <div><h3>触发条件</h3><p class="section-tip">配置命中分支的投放条件；投放指标需选择统计窗口。</p></div>
+        <button class="btn small" onclick="addCondition('branch')">新增</button>
+      </div>
+      ${conditionBuilder(b.conditions,'branch')}
+    </div>
     <div class="form-section"><h3>退出条件</h3>${exitEditor(b)}</div>
     <div class="form-section"><h3>作用范围</h3>${scopeEditor(b,s)}</div>
     <div class="form-section"><h3>分支回传配置</h3>${branchReturnEditor(b,s)}</div>
@@ -584,8 +791,8 @@ function branchReturnEditor(b,s){
   return `<div class="form">
     ${field('转化事件',selectHtml(events,b.event,`setBranchEvent(this.value)`))}
     ${field('平台转化类型',selectHtml(conversionTypes[s.platform],b.conversion,`setBranch('conversion',this.value)`))}
-    ${field('语料标签筛选',conditionBuilder(b.corpusRows,'branchCorpus'),'span2')}
-    ${field('用户属性筛选',conditionBuilder(b.userRows,'branchUserAttribute'),'span2')}
+    <div class="field span2">${conditionPanel('语料标签筛选',b.corpusRows.length,'branchCorpus',conditionBuilder(b.corpusRows,'branchCorpus'))}</div>
+    <div class="field span2">${conditionPanel('用户属性筛选',b.userRows.length,'branchUserAttribute',conditionBuilder(b.userRows,'branchUserAttribute'))}</div>
     ${field('设备筛选',branchDeviceSelector(b))}
     ${field('排除访问应用',branchAppSelector(b))}
     ${field('扣量策略',branchDeductEditor(b),'span2')}
@@ -601,9 +808,8 @@ function branchRatioEditor(b,s){
 function exitEditor(b){
   const e=b.exit;
   return `<div class="inline-checks">
-    <label><input type="checkbox" checked disabled> 触发条件不再满足</label>
-    <label><input type="checkbox" ${e.limit?'checked':''} onchange="strategy().branches[selectedIndex].exit.limit=this.checked;renderStrategyDetail()"> 达到分支回传上限 ${e.limit?`<input class="input" style="width:88px" value="${e.limitValue}"> 条`:''}</label>
-    <label><input type="checkbox" ${e.maxTime?'checked':''} onchange="strategy().branches[selectedIndex].exit.maxTime=this.checked;renderStrategyDetail()"> 达到最长生效时间 ${e.maxTime?`<input class="input" style="width:88px" value="${e.maxHours}"> 小时`:''}</label>
+    <label><input type="checkbox" ${e.conditionGone?'checked':''} ${disabledAttr()} onchange="strategy().branches[selectedIndex].exit.conditionGone=this.checked;renderStrategyDetail()"> 触发条件不再满足</label>
+    <label><input type="checkbox" ${e.limit?'checked':''} ${disabledAttr()} onchange="strategy().branches[selectedIndex].exit.limit=this.checked;renderStrategyDetail()"> 达到分支回传上限 ${e.limit?`<input class="input" style="width:88px" type="number" value="${e.limitValue}" ${disabledAttr()} oninput="strategy().branches[selectedIndex].exit.limitValue=Number(this.value)"> 条`:''}</label>
   </div>`;
 }
 function scopeEditor(b,s){
@@ -623,15 +829,23 @@ function saveStrategy(){
   s.stages.forEach((st,i)=>{
     if(!st.event)errors.push(['stage',i,`${st.name} 未选择转化事件`]);
     if(!st.conversion)errors.push(['stage',i,`${st.name} 未选择平台转化类型`]);
-    if(st.flowMode==='数量达标' && (!st.flowTarget||st.flowTarget<1))errors.push(['stage',i,`${st.name} 的阶段流转目标必须为正整数`]);
-    if(st.flowMode==='条件达标' && !st.conditionRows.length)errors.push(['stage',i,`${st.name} 的条件达标规则不能为空`]);
+    if(!st.conditionRows.length)errors.push(['stage',i,`${st.name} 至少需要 1 条流转条件`]);
+    if(targetStageOptionsFor(i).length && !st.targetStage)errors.push(['stage',i,`${st.name} 流转条件未选择目标阶段`]);
+    st.conditionRows.forEach((r,ri)=>{
+      if(r.category==='事件数量达标' && (!Number(r.value)||Number(r.value)<1))errors.push(['stage',i,`${st.name} 第 ${ri+1} 条事件数量条件必须为正整数`]);
+      if(r.category==='投放指标' && r.window==='近 N 小时' && (!Number(r.windowHours)||Number(r.windowHours)<1||Number(r.windowHours)>168))errors.push(['stage',i,`${st.name} 第 ${ri+1} 条投放指标近 N 小时必须配置 1-168 的小时数`]);
+    });
     if((st.deduct.m||st.deduct.n) && (!st.deduct.m||!st.deduct.n||st.deduct.n>=st.deduct.m))errors.push(['stage',i,`${st.name} 的扣量需满足 1≤N<M`]);
   });
-  if(s.stages.filter(st=>st.reset).length>1)errors.push(['stage',0,'同一策略组最多一个阶段开启重置转化计数']);
   s.branches.forEach((b,i)=>{
     if(!b.conditions.length)errors.push(['branch',i,`${b.name} 触发条件不能为空`]);
     if(!b.event)errors.push(['branch',i,`${b.name} 未选择分支转化事件`]);
     if(!b.conversion)errors.push(['branch',i,`${b.name} 未选择平台转化类型`]);
+    b.conditions.forEach((r,ri)=>{
+      if(r.category==='投放指标' && r.window==='近 N 小时' && (!Number(r.windowHours)||Number(r.windowHours)<1||Number(r.windowHours)>168))errors.push(['branch',i,`${b.name} 第 ${ri+1} 条投放指标近 N 小时必须配置 1-168 的小时数`]);
+    });
+    if(!b.exit.conditionGone && !b.exit.limit)errors.push(['branch',i,`${b.name} 至少选择 1 个退出条件`]);
+    if(b.exit.limit && (!Number(b.exit.limitValue)||Number(b.exit.limitValue)<1))errors.push(['branch',i,`${b.name} 的分支回传上限必须为正整数`]);
     if(b.mode==='与主线并行' && b.ratioMode==='按比例回传' && (!b.ratioX||!b.ratioY))errors.push(['branch',i,`${b.name} 的分支回传比例必须配置`]);
     if(b.mode==='与主线并行' && b.ratioMode==='按比例回传' && !b.conditions.some(c=>c.category==='策略状态'&&c.field==='当前阶段'&&c.op==='='&&c.value))errors.push(['branch',i,`${b.name} 按比例回传时，触发条件必须选择主线阶段`]);
   });
@@ -652,15 +866,57 @@ function closePreview(){
 }
 function confirmSave(){const s=strategy();s.version+=1;s.updated='2026-07-03 现在';closeAllDrawers();closeStrategyDetail();toast(s.status==='启用'?`已保存并生效，生成 v${s.version}`:'已保存配置，停用状态下不参与新事件判断')}
 function renderRuntime(){
-  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>当前阶段</th><th>阶段进度</th><th>命中分支</th><th>最近回传</th><th>最近未回传原因</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${runtime.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id} · ${r.type}</div></td><td>${r.stage}</td><td>${r.progress}</td><td>${r.branch==='无'?tag('无','gray'):tag(r.branch,'orange')}</td><td>${r.recent}</td><td>${r.notSent}</td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('')}</tbody></table>`;
+  renderRuntimeFilters();
+  const rows=filteredRuntime();
+  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>策略组</th><th>对象类型</th><th>当前阶段</th><th>阶段进度</th><th>命中分支</th><th>最近回传</th><th>最近未回传原因</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${rows.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id}</div></td><td>${esc(strategyNameById(r.strategyId))}</td><td>${r.type}</td><td>${r.stage}</td><td>${r.progress}</td><td>${r.branch==='无'?tag('无','gray'):tag(r.branch,'orange')}</td><td>${r.recent}</td><td>${r.notSent}</td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('') || `<tr><td colspan="10"><div class="sub">暂无符合当前筛选条件的运行对象</div></td></tr>`}</tbody></table>`;
 }
-function openRuntimeFromStrategy(){switchView('runtime',document.querySelectorAll('#nav button')[1])}
+function renderRuntimeFilters(){
+  const box=$('runtimeFilters'); if(!box)return;
+  box.innerHTML=`
+    <div class="field" style="width:220px"><label>策略组</label>${multiDropdown('runtime_strategy',runtimeStrategyOptions(),runtimeFilters.strategyGroups,'updateRuntimeStrategyFilter')}</div>
+    <div class="field" style="width:140px"><label>对象类型</label>${multiDropdown('runtime_type',['广告','账户','落地页'],runtimeFilters.objectTypes,'updateRuntimeTypeFilter')}</div>
+    <div class="field" style="width:220px"><label>对象</label>${multiDropdown('runtime_object',runtimeObjectOptions(),runtimeFilters.objects,'updateRuntimeObjectFilter')}</div>
+    <div class="field" style="width:150px"><label>当前阶段</label>${multiDropdown('runtime_stage',unique(runtime.map(r=>r.stage)),runtimeFilters.stages,'updateRuntimeStageFilter')}</div>
+    <div class="field" style="width:190px"><label>命中分支</label>${multiDropdown('runtime_branch',unique(runtime.map(r=>r.branch)),runtimeFilters.branches,'updateRuntimeBranchFilter')}</div>
+    <div class="field" style="width:190px"><label>最近未回传原因</label>${multiDropdown('runtime_not_sent',unique(runtime.map(r=>r.notSent.split(' · ')[0])),runtimeFilters.notSentReasons,'updateRuntimeNotSentFilter')}</div>
+    <button class="btn" style="align-self:end" onclick="clearRuntimeFilters()">清空筛选</button>`;
+}
+function unique(arr){return Array.from(new Set(arr.filter(Boolean)))}
+function strategyNameById(id){return (strategies.find(s=>s.id===id)||{}).name||id}
+function runtimeStrategyOptions(){return unique(runtime.map(r=>strategyNameById(r.strategyId)))}
+function runtimeObjectOptions(){
+  const rows=runtimeFilters.objectTypes.length?runtime.filter(r=>runtimeFilters.objectTypes.includes(r.type)):runtime;
+  return unique(rows.map(r=>r.object));
+}
+function filteredRuntime(){
+  return runtime.filter(r=>
+    (!runtimeFilters.strategyGroups.length||runtimeFilters.strategyGroups.includes(strategyNameById(r.strategyId))) &&
+    (!runtimeFilters.objectTypes.length||runtimeFilters.objectTypes.includes(r.type)) &&
+    (!runtimeFilters.objects.length||runtimeFilters.objects.includes(r.object)) &&
+    (!runtimeFilters.stages.length||runtimeFilters.stages.includes(r.stage)) &&
+    (!runtimeFilters.branches.length||runtimeFilters.branches.includes(r.branch)) &&
+    (!runtimeFilters.notSentReasons.length||runtimeFilters.notSentReasons.includes(r.notSent.split(' · ')[0]))
+  );
+}
+function updateRuntimeFilter(key,value,checked){runtimeFilters[key]=toggleValue(runtimeFilters[key],value,checked);renderRuntime()}
+function updateRuntimeStrategyFilter(value,checked){updateRuntimeFilter('strategyGroups',value,checked)}
+function updateRuntimeTypeFilter(value,checked){runtimeFilters.objectTypes=toggleValue(runtimeFilters.objectTypes,value,checked);runtimeFilters.objects=runtimeFilters.objects.filter(o=>runtimeObjectOptions().includes(o));renderRuntime()}
+function updateRuntimeObjectFilter(value,checked){updateRuntimeFilter('objects',value,checked)}
+function updateRuntimeStageFilter(value,checked){updateRuntimeFilter('stages',value,checked)}
+function updateRuntimeBranchFilter(value,checked){updateRuntimeFilter('branches',value,checked)}
+function updateRuntimeNotSentFilter(value,checked){updateRuntimeFilter('notSentReasons',value,checked)}
+function clearRuntimeFilters(){runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};renderRuntime()}
+function openRuntimeFromStrategy(id){
+  runtimeFilters={strategyGroups:id?[strategyNameById(id)]:[],objectTypes:[],objects:[],stages:[],branches:[],notSentReasons:[]};
+  switchView('runtime',navButton('runtime'));
+}
 function openLogsForObject(id){
   currentObjectId=id;
   const obj=runtime.find(r=>r.id===id);
-  logSearch=obj?obj.object:'';
+  logFilters={strategyGroups:[],versions:[],objectTypes:obj?[obj.type]:[],objects:obj?[obj.object]:[],events:[],statuses:[],reasons:[],appNames:[]};
+  selectedLogIds=[];
   closeObject();
-  switchView('logs',document.querySelectorAll('#nav button')[2]);
+  switchView('logs',navButton('logs'));
   toast('已按当前对象筛选回传记录');
 }
 function openObject(id){currentObjectId=id;$('drawerMask').classList.add('show');$('objectDrawer').classList.add('show');renderObject()}
@@ -678,13 +934,74 @@ function renderObject(){
   `;
 }
 function renderLogs(){
-  const input=$('logKeyword'); if(input && input.value!==logSearch) input.value=logSearch;
-  const keyword=logSearch.trim();
-  const rows=keyword?logs.filter(l=>l.join(' ').includes(keyword)):logs;
-  $('logBox').innerHTML=`<table><thead><tr><th>事件时间</th><th>对象</th><th>策略组 / 版本</th><th>当前阶段</th><th>命中分支</th><th>业务事件</th><th>配置来源</th><th>状态</th><th>状态明细</th><th>操作</th></tr></thead><tbody>${rows.map(l=>`<tr><td>${l[0]}</td><td>${esc(l[8])}</td><td><button class="btn small" onclick="openStrategy('RS-6001')">${l[1]}</button></td><td>${l[2]}</td><td>${l[3]}</td><td>${l[4]}</td><td>${l[5]}</td><td>${tag(l[6],l[6]==='成功'?'green':l[6]==='未命中策略'?'gray':'orange')}</td><td>${l[7]}</td><td><button class="btn small" onclick="showLogDetail('${l[4]}','${l[7]}')">详情</button></td></tr>`).join('') || `<tr><td colspan="10"><div class="sub">暂无符合当前筛选条件的回传记录</div></td></tr>`}</tbody></table>`;
+  renderLogFilters();
+  const rows=filteredLogs();
+  selectedLogIds=selectedLogIds.filter(id=>rows.some(l=>l.id===id));
+  $('logBox').innerHTML=`
+    <div class="toolbar between" style="padding:12px">
+      <div class="sub">已选择 ${selectedLogIds.length} 条；手动回传会按所选记录重新上报。</div>
+      <button class="btn primary" onclick="manualReportSelected()" ${selectedLogIds.length?'':'disabled'}>批量手动回传</button>
+    </div>
+    <table><thead><tr><th><input type="checkbox" onchange="toggleAllLogs(this.checked)" ${rows.length&&selectedLogIds.length===rows.length?'checked':''}></th><th>事件时间</th><th>对象类型</th><th>对象</th><th>策略组名称</th><th>策略版本</th><th>当前阶段</th><th>命中分支</th><th>业务事件</th><th>AppName</th><th>配置来源</th><th>状态</th><th>状态明细</th><th>操作</th></tr></thead><tbody>${rows.map(l=>`<tr><td><input type="checkbox" ${selectedLogIds.includes(l.id)?'checked':''} onchange="toggleLog('${l.id}',this.checked)"></td><td>${l.time}</td><td>${l.objectType}</td><td>${esc(l.object)}</td><td><button class="btn small" onclick="openStrategy('${l.strategy}')">${esc(l.strategyName)}</button></td><td>${l.version}</td><td>${l.stage}</td><td>${l.branch}</td><td>${l.event}</td><td>${l.appName}</td><td>${l.source}</td><td>${tag(l.status,l.status==='成功'?'green':l.status==='未命中策略'?'gray':'orange')}</td><td>${l.reason}</td><td><button class="btn small" onclick="showLogDetail('${l.id}')">详情</button></td></tr>`).join('') || `<tr><td colspan="14"><div class="sub">暂无符合当前筛选条件的回传记录</div></td></tr>`}</tbody></table>`;
 }
-function showLogDetail(event,reason){
-  $('modalTitle').textContent='回传详情';$('modalBody').innerHTML=`<div class="split"><div><h3>命中配置</h3><div class="preview-box">策略组 RS-6001 v6；当前主线阶段；命中业务事件：${event}；配置来源可跳转到策略详情。</div></div><div><h3>判断结果</h3><div class="preview-box">回传控制、语料标签、用户属性、设备、AppName 筛选逐项展示；状态明细：${reason}。</div></div></div>`;$('modalFoot').innerHTML='<button class="btn primary" onclick="closeModal()">知道了</button>';$('modalMask').classList.add('show');$('modal').classList.add('show');
+function renderLogFilters(){
+  const box=$('logFilters'); if(!box) return;
+  const objectOptionsForLog=logObjectOptions();
+  box.innerHTML=`
+    <div class="field" style="width:160px"><label>策略组</label>${multiDropdown('log_strategy',logFilterOptions.strategyGroups,logFilters.strategyGroups,'updateLogStrategyFilter')}</div>
+    <div class="field" style="width:140px"><label>版本</label>${multiDropdown('log_version',logFilterOptions.versions,logFilters.versions,'updateLogVersionFilter')}</div>
+    <div class="field" style="width:140px"><label>对象类型</label>${multiDropdown('log_object_type',logFilterOptions.objectTypes,logFilters.objectTypes,'updateLogObjectTypeFilter')}</div>
+    <div class="field" style="width:220px"><label>对象</label>${multiDropdown('log_object',objectOptionsForLog,logFilters.objects.filter(o=>objectOptionsForLog.includes(o)),'updateLogObjectFilter')}</div>
+    <div class="field" style="width:160px"><label>业务事件</label>${multiDropdown('log_event',logFilterOptions.events,logFilters.events,'updateLogEventFilter')}</div>
+    <div class="field" style="width:150px"><label>状态</label>${multiDropdown('log_status',logFilterOptions.statuses,logFilters.statuses,'updateLogStatusFilter')}</div>
+    <div class="field" style="width:180px"><label>状态明细</label>${multiDropdown('log_reason',logFilterOptions.reasons,logFilters.reasons,'updateLogReasonFilter')}</div>
+    <div class="field" style="width:160px"><label>AppName</label>${multiDropdown('log_app',logFilterOptions.appNames,logFilters.appNames,'updateLogAppFilter')}</div>
+    <button class="btn" style="align-self:end" onclick="clearLogFilters()">清空筛选</button>`;
+}
+function filteredLogs(){
+  return logs.filter(l=>
+    (!logFilters.strategyGroups.length||logFilters.strategyGroups.includes(l.strategyName)) &&
+    (!logFilters.versions.length||logFilters.versions.includes(l.version)) &&
+    (!logFilters.objectTypes.length||logFilters.objectTypes.includes(l.objectType)) &&
+    (!logFilters.objects.length||logFilters.objects.includes(l.object)) &&
+    (!logFilters.events.length||logFilters.events.includes(l.event)) &&
+    (!logFilters.statuses.length||logFilters.statuses.includes(l.status)) &&
+    (!logFilters.reasons.length||logFilters.reasons.includes(l.reason)) &&
+    (!logFilters.appNames.length||logFilters.appNames.includes(l.appName))
+  );
+}
+function logObjectOptions(){
+  const source=logFilters.objectTypes.length?logs.filter(l=>logFilters.objectTypes.includes(l.objectType)):logs;
+  return Array.from(new Set(source.map(l=>l.object)));
+}
+function updateLogFilter(key,value,checked){logFilters[key]=toggleValue(logFilters[key],value,checked);selectedLogIds=[];renderLogs()}
+function updateLogStrategyFilter(value,checked){updateLogFilter('strategyGroups',value,checked)}
+function updateLogVersionFilter(value,checked){updateLogFilter('versions',value,checked)}
+function updateLogObjectTypeFilter(value,checked){logFilters.objectTypes=toggleValue(logFilters.objectTypes,value,checked);logFilters.objects=logFilters.objects.filter(o=>logObjectOptions().includes(o));selectedLogIds=[];renderLogs()}
+function updateLogObjectFilter(value,checked){updateLogFilter('objects',value,checked)}
+function updateLogEventFilter(value,checked){updateLogFilter('events',value,checked)}
+function updateLogStatusFilter(value,checked){updateLogFilter('statuses',value,checked)}
+function updateLogReasonFilter(value,checked){updateLogFilter('reasons',value,checked)}
+function updateLogAppFilter(value,checked){updateLogFilter('appNames',value,checked)}
+function clearLogFilters(){logFilters={strategyGroups:[],versions:[],objectTypes:[],objects:[],events:[],statuses:[],reasons:[],appNames:[]};selectedLogIds=[];renderLogs()}
+function toggleLog(id,checked){selectedLogIds=toggleValue(selectedLogIds,id,checked);renderLogs()}
+function toggleAllLogs(checked){selectedLogIds=checked?filteredLogs().map(l=>l.id):[];renderLogs()}
+function manualReportSelected(){
+  const count=selectedLogIds.length;
+  if(!count)return;
+  $('modalTitle').textContent='确认手动回传';
+  $('modalBody').innerHTML=`<div class="preview-box">将对已勾选的 ${count} 条回传记录重新上报。原记录保留不覆盖，系统会新增手动回传记录，用于保留完整审计链路。</div>`;
+  $('modalFoot').innerHTML='<button class="btn" onclick="closeModal()">取消</button><button class="btn primary" onclick="confirmManualReport()">确认回传</button>';
+  $('modalMask').classList.add('show');$('modal').classList.add('show');
+}
+function confirmManualReport(){
+  const selected=logs.filter(l=>selectedLogIds.includes(l.id));
+  selected.forEach((l,i)=>logs.unshift({...l,id:`manual-${Date.now()}-${i}`,time:'2026-07-06 现在',source:'手动回传',status:'成功',reason:'手动回传成功',originId:l.id}));
+  const count=selected.length;selectedLogIds=[];closeModal();renderLogs();toast(`已新增 ${count} 条手动回传成功记录`);
+}
+function showLogDetail(id){
+  const l=logs.find(item=>item.id===id)||logs[0];
+  $('modalTitle').textContent='回传详情';$('modalBody').innerHTML=`<div class="split"><div><h3>命中配置</h3><div class="preview-box">策略组 ${l.strategy} ${l.version}；当前阶段：${l.stage}；业务事件：${l.event}；AppName：${l.appName}。</div></div><div><h3>判断结果</h3><div class="preview-box">回传控制、语料标签、用户属性、设备、AppName 筛选逐项展示；状态明细：${l.reason}。</div></div></div>`;$('modalFoot').innerHTML='<button class="btn primary" onclick="closeModal()">知道了</button>';$('modalMask').classList.add('show');$('modal').classList.add('show');
 }
 function closeModal(){$('modalMask').classList.remove('show');$('modal').classList.remove('show')}
 function renderConfig(){
