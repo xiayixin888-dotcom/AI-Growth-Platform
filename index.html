@@ -3,19 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=prototype/回传策略中心_交互原型_v6.html">
-  <title>AI Growth Platform Demo V6</title>
+  <title>AI Growth Platform Demo</title>
   <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;background:#f7f9ff;color:#172033}
-    .card{padding:28px 32px;border:1px solid #e5ebf7;border-radius:20px;background:white;box-shadow:0 18px 60px rgba(35,56,118,.12);text-align:center}
-    a{color:#4f46e5;text-decoration:none;font-weight:700}
+    :root{--bg:#f7f9ff;--text:#172033;--muted:#728096;--line:#e7ebf4;--blue:#3768ff;--purple:#7b5cff;--shadow:0 18px 45px rgba(53,79,146,.10)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at 8% 0,#ebe7ff 0,transparent 28%),radial-gradient(circle at 90% 8%,#e4f9ff 0,transparent 25%),var(--bg);color:var(--text)}
+    main{width:min(1080px,92vw);margin:0 auto;padding:64px 0}
+    .hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:24px}
+    h1{font-size:32px;margin:0 0 8px}
+    p{margin:0;color:var(--muted);line-height:1.7}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .card{background:rgba(255,255,255,.9);border:1px solid rgba(226,232,240,.86);border-radius:18px;box-shadow:var(--shadow);padding:22px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between}
+    .badge{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 12px 24px rgba(79,70,229,.22)}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+    .tag{display:inline-flex;align-items:center;min-height:24px;border-radius:999px;padding:2px 9px;font-size:12px;background:#eef2ff;color:#4f46e5;border:1px solid #d8defe}
+    a.btn{height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0 16px;width:max-content}
+    a.link{color:#4f46e5;text-decoration:none;font-weight:700}
+    @media(max-width:760px){.grid,.hero{grid-template-columns:1fr;display:grid}.hero{align-items:start}main{padding:32px 0}}
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>AI Growth Platform Demo V6</h1>
-    <p>正在打开回传策略中心交互原型。</p>
-    <p><a href="prototype/回传策略中心_交互原型_v6.html">如果没有自动跳转，点击这里进入 Demo</a></p>
+  <main>
+    <section class="hero">
+      <div>
+        <h1>AI Growth Platform Demo</h1>
+        <p>当前项目包含回传策略中心和投放回传数据面板两个评审原型。</p>
+      </div>
+      <a class="link" href="README.md">查看说明</a>
+    </section>
+    <section class="grid">
+      <article class="card">
+        <div>
+          <div class="badge">V6</div>
+          <h2>回传策略中心</h2>
+          <p>主线阶段、分支策略、运行详情、回传记录和平台转化类型配置。</p>
+          <div class="meta"><span class="tag">策略管理</span><span class="tag">运行详情</span><span class="tag">回传记录</span></div>
+        </div>
+        <a class="btn" href="prototype/回传策略中心_交互原型_v6.html">打开 Demo</a>
+      </article>
+      <article class="card">
+        <div>
+          <div class="badge">D</div>
+          <h2>投放回传数据面板</h2>
+          <p>首页、广告对象分析、落地页分析、策略组执行分析、监控提醒和小时级分析。</p>
+          <div class="meta"><span class="tag">数据面板</span><span class="tag">监控提醒</span><span class="tag">小时级</span></div>
+        </div>
+        <a class="btn" href="prototype/投放回传数据面板_交互原型.html">打开 Demo</a>
+      </article>
+    </section>
   </main>
 </body>
 </html>
