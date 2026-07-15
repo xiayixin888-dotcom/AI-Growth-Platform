@@ -248,5 +248,20 @@ renderOverlay=function(){
     :'<div class="section">'+hourTrendPanel('creative',AD_METRICS,['消耗','点击'])+'</div>';
   $('overlay').innerHTML='<div class="drawer-mask" onclick="closeDrawer()"></div><aside class="drawer"><div class="drawer-head"><div><h2>'+creative.name+' · 创意详情</h2></div><div class="drawer-actions"><button class="btn primary" onclick="openRule(\'\',{type:\'创意素材\',objects:[\''+creative.id+'\']})">新建监控</button><button class="icon" onclick="closeDrawer()">×</button></div></div><div class="drawer-body">'+trend+'</div></aside>';
 };
+/* 监控任务：停用即停止后续检测；删除仅移除任务，报警事实永久保留。 */
+function deleteRule(id){
+  const rule=state.rules.find(item=>item.id===id);
+  if(!rule)return;
+  if(!window.confirm('删除“'+rule.name+'”后将停止后续检测；已产生的报警记录会永久保留。是否删除？'))return;
+  state.rules=state.rules.filter(item=>item.id!==id);
+  render();
+  toast('监控任务已删除，历史报警记录已保留');
+}
+taskList=function(){
+  return '<div class="notice" style="margin-bottom:12px">同一规则、对象和指标条件当天最多提醒一次；检测频率仅决定检测间隔。</div><div class="table-wrap"><table class="table"><thead><tr><th>监控任务</th><th>对象类型</th><th>监控对象</th><th>指标条件</th><th>统计范围</th><th>检测频率</th><th>生效时段</th><th>状态</th><th>操作</th></tr></thead><tbody>'+state.rules.map(rule=>'<tr><td><b>'+rule.name+'</b></td><td>'+rule.type+'</td><td>'+ruleNames(rule).join('、')+'</td><td>'+rule.conditions.map(condition=>condition.metric+condition.op+condition.value).join('；')+'</td><td>'+(rule.window?'近 '+rule.window+' 小时':'当日累计')+'</td><td>'+rule.freq+'</td><td>'+rule.period+'</td><td><label><input type="checkbox" '+(rule.enabled?'checked':'')+' onchange="toggleRule(\''+rule.id+'\')"> '+(rule.enabled?'启用':'停用')+'</label></td><td style="white-space:nowrap"><button class="btn" onclick="openRule(\''+rule.id+'\')">编辑</button><button class="btn" style="margin-left:8px;color:#d03030" onclick="deleteRule(\''+rule.id+'\')">删除</button></td></tr>').join('')+'</tbody></table></div>';
+};
+recordList=function(){
+  return '<div class="notice">报警记录永久保留触发事实与当前用户通知状态；不提供小时趋势入口。</div><div class="table-wrap" style="margin-top:12px"><table class="table"><thead><tr><th>触发时间 / 报警 ID</th><th>通知状态</th><th>监控对象</th><th>命中指标</th><th>命中条件</th><th>统计范围</th><th>操作</th></tr></thead><tbody>'+state.alerts.map(alert=>'<tr><td>'+alert.time+'<br><small>'+alert.id+'</small></td><td><span class="tag '+(alert.unread?'warn':'gray')+'">'+(alert.unread?'未读':'已读')+'</span></td><td><b>'+alert.object+'</b></td><td>'+alert.metric+'</td><td>'+alert.reason+'</td><td>'+(/近/.test(alert.reason)?alert.reason.match(/（(.+)）/)?.[1]:'当日累计')+'</td><td><button class="btn" onclick="openRecord(\''+alert.id+'\')">查看详情</button></td></tr>').join('')+'</tbody></table></div>';
+};
 render();
 </script></body></html>
