@@ -1,13 +1,13 @@
 # AI Growth Platform Demo
 
-版本：V6 策略中心评审版 + 数据面板 Demo
+版本：V7 策略中心评审版 + 数据面板 Demo
 
 本仓库仅用于存放 AI 增长平台交互 Demo。
 
 ## Demo 入口
 
 - 本地入口：`index.html`
-- 回传策略中心：`prototype/回传策略中心_交互原型_v6.html`
+- 回传策略中心：`prototype/回传策略中心_交互原型_v7.html`
 - 投放回传数据面板：`prototype/投放回传数据面板_交互原型.html`
 
 ## 本版本范围

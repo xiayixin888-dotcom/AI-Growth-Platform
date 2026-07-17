@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>回传策略中心 - MVP V6 交互原型</title>
+  <title>回传策略中心 - MVP V7 交互原型</title>
   <style>
     :root{
       --bg:#f7f9ff;--card:#fff;--text:#172033;--muted:#728096;--line:#e7ebf4;
@@ -39,9 +39,9 @@
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand"><div class="logo">V6</div><span>AI Growth</span></div>
+    <div class="brand"><div class="logo">V7</div><span>AI Growth</span></div>
     <div><div class="nav-label">回传策略中心</div><nav class="nav" id="nav"></nav></div>
-    <div class="sub" style="margin-top:auto">MVP V6：阶段与转化事件合并为一层</div>
+    <div class="sub" style="margin-top:auto">MVP V7：分支日重置与回传追溯</div>
   </aside>
   <main class="main">
     <div class="top" id="globalTop">
@@ -53,7 +53,7 @@
       <div class="card panel">
         <div class="toolbar between">
           <div class="filters" id="strategyFilters"></div>
-          <button class="btn primary" onclick="openStrategy()">新建策略组</button>
+          <button class="btn primary" onclick="createStrategy()">新建策略组</button>
         </div>
       </div>
       <div class="card table" id="strategyBox" style="margin-top:18px"></div>
@@ -183,23 +183,24 @@ const corpusTags=[
 ];
 const metricFields=['广告消耗','广告点击','广告转化数','广告转化成本','落地页点击数','落地页点击率','加粉数','加粉成本','加粉率','开口数','开口成本','开口率'];
 const userAttributeFields=['新用户','老用户','落地页停留时间','加好友后未解除关系时长','加好友后多少时间内开口'];
+const landingEvent='点击或长按落地页组件';
 const conditionPools={
   stageCondition:{'事件数量达标':events,'时间段':['生效时段']},
   corpus:{'语料标签':corpusTags.map(i=>i[0])},
   userAttribute:{'用户属性':userAttributeFields},
   branch:{'策略状态':['当前阶段'],'时间段':['生效时段'],'投放指标':metricFields}
 };
-const deviceOptions=['iOS','Android','PC','未知'];
+const deviceOptions=[];
 const appOptions=['aweme','aweme_lite','news_article','live_stream','novelapp','空值'];
 const strategyNameMap={'RS-6001':'巨量冷启到有效开口策略','RS-6002':'百度账户加粉质量策略','RS-6003':'腾讯落地页会话线索策略'};
 const logFilterOptions={
   strategyGroups:Object.values(strategyNameMap),
-  versions:['v2','v3','v6'],
+  versions:['v2','v3','v7'],
   objectTypes:['广告','账户','落地页'],
   objects:['618 大促-信息流推广-A计划','618 大促-信息流推广-B计划','百度营销-华东账户'],
   events:['点击或长按落地页组件','加企微好友','加企微群','有效开口','会话线索'],
-  statuses:['成功','失败','等待中','命中但未回传','未命中策略'],
-  reasons:['媒体返回 200','扣量','窗口期超期','语料标签不满足','对象未绑定启用策略'],
+  statuses:['成功','失败','等待中','已失效','未命中策略'],
+  reasons:['媒体返回 200','等待好友关系留存 30 分钟','好友关系已解除','扣量','窗口期超期','投放指标数据未就绪；后续数据仅用于新事件','对象未绑定启用策略'],
   appNames:appOptions
 };
 const objectOptions={
@@ -208,7 +209,7 @@ const objectOptions={
   '落地页':['华东找房落地页','百度新房落地页','深圳二手房落地页A','上海浦东新房落地页','苏州园区改善落地页','杭州未来科技城落地页','南京河西会话落地页','无锡二手房落地页']
 };
 let selectedType='stage', selectedIndex=0, currentStrategyId='RS-6001', configPlatformTab='巨量', objectTab='progress', currentObjectId='obj-1', detailReadOnly=false, detailReturnView='strategies';
-let logFilters={strategyGroups:[],versions:[],objectTypes:[],objects:[],events:[],statuses:[],reasons:[],appNames:[]}, selectedLogIds=[];
+let logFilters={strategyGroups:[],versions:[],objectTypes:[],objects:[],events:[],statuses:[],reasons:[],appNames:[]}, selectedLogIds=[], manualConversionType='';
 
 function stageTpl(n,event='点击或长按落地页组件',target=20){
   return {
@@ -217,7 +218,7 @@ function stageTpl(n,event='点击或长按落地页组件',target=20){
     conditionRows:[{category:'事件数量达标',field:event,countType:'成功回传数',op:'>=',value:target,logic:'或'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'或'}],conditionLogic:'或',
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
     userRows:[{category:'用户属性',field:'新用户',op:'=',value:'是'}],userLogic:'且',
-    devices:['iOS','Android'],apps:['aweme_lite'],
+    devices:[],apps:['aweme_lite'],
     deduct:{enabled:true,expanded:false,m:3,n:1},
     windowDays:event==='加企微群'||event==='会话线索'?7:'',windowHours:event==='有效开口'?24:''
   };
@@ -229,32 +230,34 @@ function branchTpl(n,name=`P${n} 成本异常覆盖`){
     event:n===2?'有效开口':'加企微好友',conversion:n===2?conversionTypes['巨量'][3]:conversionTypes['巨量'][1],
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],
     userRows:[{category:'用户属性',field:'加好友后未解除关系时长',op:'>=',value:'30'}],
-    devices:['iOS','Android'],apps:['aweme_lite'],
+    devices:[],apps:['aweme_lite'],
     deduct:{m:2,n:1},
     windowDays:'',windowHours:'',
     ratioMode:n===2?'按比例回传':'全部回传',ratioX:2,ratioY:1,
-    exit:{conditionGone:true,limit:false,limitValue:120},
+    exit:{conditionGone:true,limit:n===1,limitValue:120,resetHour:n===1?'02:00':''},
     scope:'整个策略组',objects:[]
   };
 }
 let strategies=[
-  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:6,status:'启用',updated:'2026-07-03 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动'),branchTpl(3,'P3 同事件备用收紧')]},
+  {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:7,status:'启用',updated:'2026-07-17 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动'),branchTpl(3,'P3 同事件备用收紧')]},
   {id:'RS-6002',name:'百度账户加粉质量策略',platform:'百度',scope:'账户',objectItems:objectOptions['账户'].slice(),objects:'3 个账户',version:3,status:'启用',updated:'2026-07-03 09:42',isTemplate:false,templateName:'',copyCount:0,creator:'运营A',stages:[stageTpl(1,'点击或长按落地页组件',20),stageTpl(2,'有效开口',9999)],branches:[branchTpl(1,'P1 账户成本异常')]},
   {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',version:2,status:'停用',updated:'2026-07-02 18:20',isTemplate:true,templateName:'会话线索回传模板',copyCount:6,creator:'运营B',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传')]}
 ];
 let strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};
 let templateFilters={keyword:'',platforms:[]};
 let runtime=[
-  {id:'obj-1',strategyId:'RS-6001',object:'618 大促-信息流推广-A计划',type:'广告',stage:'第 2 阶段',progress:'加企微好友 25/30',branch:'P1 成本异常收紧、P2 深层达标补互动',updated:'2026-07-03 10:31'},
-  {id:'obj-2',strategyId:'RS-6001',object:'618 大促-信息流推广-B计划',type:'广告',stage:'第 1 阶段',progress:'落地页互动 47/50',branch:'无',updated:'2026-07-03 09:46'},
-  {id:'obj-3',strategyId:'RS-6002',object:'百度营销-华东账户',type:'账户',stage:'第 2 阶段',progress:'有效开口今日 12',branch:'P1 账户成本异常',updated:'2026-07-03 10:10'}
+  {id:'obj-1',strategyId:'RS-6001',object:'618 大促-信息流推广-A计划',type:'广告',stage:'第 2 阶段',progress:'加企微好友 25/30（主线冻结）',branch:'P1 成本异常收紧',branchState:'已达上限退出',branchDetail:'达到 120 条上限；下次重置 02:00',updated:'2026-07-17 10:31'},
+  {id:'obj-2',strategyId:'RS-6001',object:'618 大促-信息流推广-B计划',type:'广告',stage:'第 1 阶段',progress:'落地页互动 47/50',branch:'无',branchState:'未触发',branchDetail:'当前无命中分支',updated:'2026-07-17 09:46'},
+  {id:'obj-3',strategyId:'RS-6002',object:'百度营销-华东账户',type:'账户',stage:'第 2 阶段',progress:'有效开口今日 12',branch:'P1 账户成本异常',branchState:'生效中',branchDetail:'当前命中覆盖主线分支',updated:'2026-07-17 10:10'}
 ];
 let runtimeFilters={strategyGroups:[],objectTypes:[],objects:[],stages:[],branches:[]};
 let logs=[
-  {id:'log-1',time:'2026-07-03 10:31:22',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'主线阶段',status:'成功',reason:'媒体返回 200',object:'618 大促-信息流推广-A计划',appName:'aweme'},
-  {id:'log-2',time:'2026-07-03 10:28:07',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'有效开口',source:'分支策略',status:'命中但未回传',reason:'扣量',object:'618 大促-信息流推广-A计划',appName:'aweme_lite'},
-  {id:'log-3',time:'2026-07-03 10:12:40',strategy:'RS-6003',strategyName:strategyNameMap['RS-6003'],version:'v2',objectType:'账户',stage:'第 2 阶段',branch:'无',event:'会话线索',source:'主线阶段',status:'命中但未回传',reason:'窗口期超期',object:'百度营销-华东账户',appName:'news_article'},
-  {id:'log-4',time:'2026-07-03 09:58:11',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v6',objectType:'广告',stage:'第 1 阶段',branch:'无',event:'点击或长按落地页组件',source:'主线阶段',status:'未命中策略',reason:'对象未绑定启用策略',object:'618 大促-信息流推广-B计划',appName:'live_stream'}
+  {id:'log-1',time:'2026-07-17 10:31:22',platform:'巨量',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v7',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'分支策略',status:'成功',reason:'媒体返回 200',object:'618 大促-信息流推广-A计划',appName:'aweme'},
+  {id:'log-2',time:'2026-07-17 10:28:07',platform:'巨量',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v7',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'有效开口',source:'分支策略',status:'已失效',reason:'扣量',object:'618 大促-信息流推广-A计划',appName:'aweme_lite'},
+  {id:'log-3',time:'2026-07-17 10:20:00',platform:'巨量',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v7',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'主线阶段',status:'等待中',reason:'等待好友关系留存 30 分钟',object:'618 大促-信息流推广-A计划',appName:'aweme'},
+  {id:'log-4',time:'2026-07-17 10:12:40',platform:'腾讯',strategy:'RS-6003',strategyName:strategyNameMap['RS-6003'],version:'v2',objectType:'账户',stage:'第 2 阶段',branch:'无',event:'会话线索',source:'主线阶段',status:'已失效',reason:'窗口期超期',object:'百度营销-华东账户',appName:'news_article'},
+  {id:'log-5',time:'2026-07-17 10:06:10',platform:'巨量',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v7',objectType:'广告',stage:'第 2 阶段',branch:'P1 成本异常收紧',event:'加企微好友',source:'分支策略',status:'已失效',reason:'投放指标数据未就绪；后续数据仅用于新事件',object:'618 大促-信息流推广-A计划',appName:'aweme_lite'},
+  {id:'log-6',time:'2026-07-17 09:58:11',platform:'巨量',strategy:'RS-6001',strategyName:strategyNameMap['RS-6001'],version:'v7',objectType:'广告',stage:'第 1 阶段',branch:'无',event:'点击或长按落地页组件',source:'主线阶段',status:'未命中策略',reason:'对象未绑定启用策略',object:'618 大促-信息流推广-B计划',appName:'live_stream'}
 ];
 function strategy(){return strategies.find(s=>s.id===currentStrategyId)||strategies[0]}
 function tag(text,type='gray'){return `<span class="tag ${type}">${text}</span>`}
@@ -410,6 +413,12 @@ function updateStrategyScopeFilter(value,checked){strategyFilters.scopes=toggleV
 function updateStrategyStatusFilter(value,checked){updateStrategyFilter('statuses',value,checked)}
 function updateStrategyObjectFilter(value,checked){updateStrategyFilter('objects',value,checked)}
 function clearStrategyFilters(){strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};renderStrategies()}
+function createStrategy(){
+  const base=JSON.parse(JSON.stringify(strategies[0]));
+  const serial=String(Date.now()).slice(-5);
+  const s={...base,id:`RS-${serial}`,name:'未命名策略组',objectItems:[],objects:'0 个广告',version:1,status:'停用',updated:'2026-07-17 现在',isTemplate:false,templateName:'',copyCount:0,creator:'当前运营'};
+  strategies.unshift(s);currentStrategyId=s.id;selectedType='stage';selectedIndex=0;detailReadOnly=false;detailReturnView='strategies';$('errorArea').innerHTML='';showStrategyDetail();renderStrategyDetail();toast('已新建停用策略组，请配置后手动启用');
+}
 function openStrategy(id='RS-6001'){
   detailReadOnly=false; detailReturnView='strategies'; currentStrategyId=id; selectedType='stage'; selectedIndex=0; $('errorArea').innerHTML=''; showStrategyDetail(); renderStrategyDetail();
 }
@@ -472,7 +481,8 @@ function renderBranchList(){
 }
 function selectNode(type,i){selectedType=type;selectedIndex=i;renderStrategyDetail()}
 function updateStage(key,value){const st=strategy().stages[selectedIndex];st[key]=value;renderStrategyDetail()}
-function setStageEvent(value){const st=strategy().stages[selectedIndex];st.event=value;const types=conversionTypes[strategy().platform];st.conversion=types[events.indexOf(value)]||types[0];renderStrategyDetail()}
+function removeFriendRetention(rows){return (rows||[]).filter(r=>r.field!=='加好友后未解除关系时长')}
+function setStageEvent(value){const st=strategy().stages[selectedIndex];st.event=value;if(value===landingEvent)st.userRows=removeFriendRetention(st.userRows);const types=conversionTypes[strategy().platform];st.conversion=types[events.indexOf(value)]||types[0];renderStrategyDetail()}
 function renderEditor(){
   const s=strategy(); if(selectedType==='branch')return renderBranchEditor();
   const st=s.stages[selectedIndex]; if(!st){$('editorForm').innerHTML='<div class="sub">该策略组暂无阶段，点击左侧新增阶段。</div>';return}
@@ -499,9 +509,9 @@ function renderEditor(){
     <div class="form-section"><h3>筛选条件</h3>
       <div class="filter-grid">
         ${filterBox('语料标签筛选',st.corpusRows.length,conditionBuilder(st.corpusRows,'corpus'),'corpus')}
-        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'),'userAttribute')}
-        ${filterBox('设备筛选',st.devices.length,deviceSelector(st))}
-        ${filterBox('排除访问应用',st.apps.length,appSelector(st))}
+        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'),'userAttribute')}${st.event===landingEvent?'<div class="section-tip">落地页点击事件不支持“加好友后未解除关系时长”。</div>':''}
+        ${filterBox('设备筛选（UA 手机型号）',st.devices.length,deviceSelector(st))}
+        ${filterBox('排除访问应用（UA 流量包名）',st.apps.length,appSelector(st))}
       </div>
     </div>
     <div class="form-section"><h3>扣量策略</h3>${deductEditor(st.deduct)}</div>
@@ -551,9 +561,15 @@ function optionCard(title,desc,active,onclick){return `<button class="option-car
 function conditionAddButton(type){return type&&!detailReadOnly?`<button class="btn small condition-add" onclick="addCondition('${type}')">新增</button>`:''}
 function filterBox(title,count,body,type){return `<div class="mini-card"><div class="toolbar between" style="margin-bottom:8px"><b>${title}</b><div class="row-actions">${tag(`已配置 ${count} 项`,'gray')}${conditionAddButton(type)}</div></div>${body}</div>`}
 function conditionPanel(title,count,type,body){return `<div class="mini-card"><div class="toolbar between" style="margin-bottom:8px"><b>${title}</b><div class="row-actions">${tag(`已配置 ${count} 项`,'gray')}${conditionAddButton(type)}</div></div>${body}</div>`}
-function conditionBuilder(rows,type){
+function conditionPoolFor(type){
   const poolType=type==='branchCorpus'?'corpus':type==='branchUserAttribute'?'userAttribute':type;
   const pool=conditionPools[poolType]||conditionPools.stageCondition;
+  const event=type==='branchUserAttribute'?(strategy().branches[selectedIndex]||{}).event:(strategy().stages[selectedIndex]||{}).event;
+  if(poolType==='userAttribute'&&event===landingEvent)return {...pool,'用户属性':pool['用户属性'].filter(field=>field!=='加好友后未解除关系时长')};
+  return pool;
+}
+function conditionBuilder(rows,type){
+  const pool=conditionPoolFor(type);
   return `<div class="condition-builder">${rows.length?rows.map((r,i)=>`
     ${i?logicToggle(r.logic||'且',`setConditionLogic('${type}',${i},`) : ''}
     <div class="condition-row ${conditionRowClass(r)}">
@@ -640,7 +656,7 @@ function conditionRows(type){
 }
 function updateCondition(type,i,key,value){
   const poolType=type==='branchCorpus'?'corpus':type==='branchUserAttribute'?'userAttribute':type;
-  const rows=conditionRows(type), pool=conditionPools[poolType]||conditionPools.stageCondition;
+  const rows=conditionRows(type), pool=conditionPoolFor(type);
   rows[i][key]=value;
   if(key==='category')rows[i].field=(pool[value]||Object.values(pool)[0]||[''])[0];
   if(key==='category'||key==='field'){
@@ -672,7 +688,7 @@ function updateCondition(type,i,key,value){
 }
 function addCondition(type){
   const poolType=type==='branchCorpus'?'corpus':type==='branchUserAttribute'?'userAttribute':type;
-  const rows=conditionRows(type), pool=conditionPools[poolType]||conditionPools.stageCondition;
+  const rows=conditionRows(type), pool=conditionPoolFor(type);
   const category=Object.keys(pool)[0], field=(pool[category]||[''])[0];
   const isTime=category==='时间段';
   const value=category==='策略状态'?'第 1 阶段':isTime?'09:00-18:00':poolType==='corpus'?(corpusValueOptions(field)[0]||''):poolType==='userAttribute'?(field==='新用户'||field==='老用户'?'是':'30'):'10';
@@ -681,11 +697,11 @@ function addCondition(type){
 }
 function deleteCondition(type,i){if(!confirm('确认删除这条条件？'))return;conditionRows(type).splice(i,1);renderStrategyDetail()}
 function setConditionLogic(type,i,value){conditionRows(type)[i].logic=value;renderStrategyDetail()}
-function deviceSelector(st){return multiDropdown(`devices_${selectedIndex}`,deviceOptions,st.devices,'updateStageMultiDevices')}
+function deviceSelector(st){return deviceOptions.length?multiDropdown(`devices_${selectedIndex}`,deviceOptions,st.devices,'updateStageMultiDevices'):'<div class="sub">暂无 UA 解析的手机型号；数据接入后展示可选值</div>'}
 function appSelector(st){return multiDropdown(`apps_${selectedIndex}`,appOptions,st.apps,'updateStageMultiApps')}
 function updateStageMultiDevices(value,checked){const st=strategy().stages[selectedIndex];st.devices=toggleValue(st.devices,value,checked);renderStrategyDetail()}
 function updateStageMultiApps(value,checked){const st=strategy().stages[selectedIndex];st.apps=toggleValue(st.apps,value,checked);renderStrategyDetail()}
-function branchDeviceSelector(b){return multiDropdown(`branch_devices_${selectedIndex}`,deviceOptions,b.devices||[],'updateBranchDevices')}
+function branchDeviceSelector(b){return deviceOptions.length?multiDropdown(`branch_devices_${selectedIndex}`,deviceOptions,b.devices||[],'updateBranchDevices'):'<div class="sub">暂无 UA 解析的手机型号；数据接入后展示可选值</div>'}
 function branchAppSelector(b){return multiDropdown(`branch_apps_${selectedIndex}`,appOptions,b.apps||[],'updateBranchApps')}
 function updateBranchDevices(value,checked){const b=strategy().branches[selectedIndex];b.devices=toggleValue(b.devices||[],value,checked);renderStrategyDetail()}
 function updateBranchApps(value,checked){const b=strategy().branches[selectedIndex];b.apps=toggleValue(b.apps||[],value,checked);renderStrategyDetail()}
@@ -767,7 +783,7 @@ function moveBranch(index,delta){
   selectedType='branch'; selectedIndex=next; renderStrategyDetail();
 }
 function setBranchEvent(value){
-  const b=strategy().branches[selectedIndex]; b.event=value;
+  const b=strategy().branches[selectedIndex]; b.event=value;if(value===landingEvent)b.userRows=removeFriendRetention(b.userRows);
   const types=conversionTypes[strategy().platform]; b.conversion=types[events.indexOf(value)]||types[0];
   renderStrategyDetail();
 }
@@ -777,9 +793,9 @@ function branchReturnEditor(b,s){
     ${field('转化事件',selectHtml(events,b.event,`setBranchEvent(this.value)`))}
     ${field('平台转化类型',selectHtml(conversionTypes[s.platform],b.conversion,`setBranch('conversion',this.value)`))}
     <div class="field span2">${conditionPanel('语料标签筛选',b.corpusRows.length,'branchCorpus',conditionBuilder(b.corpusRows,'branchCorpus'))}</div>
-    <div class="field span2">${conditionPanel('用户属性筛选',b.userRows.length,'branchUserAttribute',conditionBuilder(b.userRows,'branchUserAttribute'))}</div>
-    ${field('设备筛选',branchDeviceSelector(b))}
-    ${field('排除访问应用',branchAppSelector(b))}
+    <div class="field span2">${conditionPanel('用户属性筛选',b.userRows.length,'branchUserAttribute',conditionBuilder(b.userRows,'branchUserAttribute'))}${b.event===landingEvent?'<div class="section-tip">落地页点击事件不支持“加好友后未解除关系时长”。</div>':''}</div>
+    ${field('设备筛选（UA 手机型号）',branchDeviceSelector(b))}
+    ${field('排除访问应用（UA 流量包名）',branchAppSelector(b))}
     ${field('扣量策略',branchDeductEditor(b),'span2')}
     ${special?field(special.label,unitInput(`strategy().branches[selectedIndex]['${special.key}']=this.value`,b[special.key]||'',special.unit)):''}
   </div>`;
@@ -795,6 +811,7 @@ function exitEditor(b){
   return `<div class="inline-checks">
     <label><input type="checkbox" ${e.conditionGone?'checked':''} ${disabledAttr()} onchange="strategy().branches[selectedIndex].exit.conditionGone=this.checked;renderStrategyDetail()"> 触发条件不再满足</label>
     <label><input type="checkbox" ${e.limit?'checked':''} ${disabledAttr()} onchange="strategy().branches[selectedIndex].exit.limit=this.checked;renderStrategyDetail()"> 达到分支回传上限 ${e.limit?`<input class="input" style="width:88px" type="number" value="${e.limitValue}" ${disabledAttr()} oninput="strategy().branches[selectedIndex].exit.limitValue=Number(this.value)"> 条`:''}</label>
+    ${e.limit?`<label>每日重置整点 <select class="select" style="width:118px" ${disabledAttr()} onchange="strategy().branches[selectedIndex].exit.resetHour=this.value"><option value="" ${!e.resetHour?'selected':''}>请选择</option>${hourOptions(e.resetHour||'',0,23)}</select></label><span class="sub">到点清零分支成功回传数；条件仍满足则自动重入</span>`:''}
   </div>`;
 }
 function scopeEditor(b,s){
@@ -831,6 +848,7 @@ function saveStrategy(){
     });
     if(!b.exit.conditionGone && !b.exit.limit)errors.push(['branch',i,`${b.name} 至少选择 1 个退出条件`]);
     if(b.exit.limit && (!Number(b.exit.limitValue)||Number(b.exit.limitValue)<1))errors.push(['branch',i,`${b.name} 的分支回传上限必须为正整数`]);
+    if(b.exit.limit && !b.exit.resetHour)errors.push(['branch',i,`${b.name} 勾选回传上限时必须选择每日重置整点`]);
     if(b.mode==='与主线并行' && b.ratioMode==='按比例回传' && (!b.ratioX||!b.ratioY))errors.push(['branch',i,`${b.name} 的分支回传比例必须配置`]);
     if(b.mode==='与主线并行' && b.ratioMode==='按比例回传' && !b.conditions.some(c=>c.category==='策略状态'&&c.field==='当前阶段'&&c.op==='='&&c.value))errors.push(['branch',i,`${b.name} 按比例回传时，触发条件必须选择主线阶段`]);
   });
@@ -841,7 +859,7 @@ function confirmSave(){const s=strategy();s.version+=1;s.updated='2026-07-03 现
 function renderRuntime(){
   renderRuntimeFilters();
   const rows=filteredRuntime();
-  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>策略组</th><th>对象类型</th><th>当前阶段</th><th>阶段进度</th><th>命中分支</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${rows.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id}</div></td><td>${esc(strategyNameById(r.strategyId))}</td><td>${r.type}</td><td>${r.stage}</td><td>${r.progress}</td><td>${r.branch==='无'?tag('无','gray'):tag(r.branch,'orange')}</td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('') || `<tr><td colspan="8"><div class="sub">暂无符合当前筛选条件的运行对象</div></td></tr>`}</tbody></table>`;
+  $('runtimeBox').innerHTML=`<table><thead><tr><th>对象名称 / ID</th><th>策略组</th><th>对象类型</th><th>当前阶段</th><th>阶段进度</th><th>分支运行状态</th><th>更新时间</th><th>操作</th></tr></thead><tbody>${rows.map(r=>`<tr><td><div class="name">${r.object}</div><div class="sub">${r.id}</div></td><td>${esc(strategyNameById(r.strategyId))}</td><td>${r.type}</td><td>${r.stage}</td><td>${r.progress}</td><td>${tag(r.branchState,r.branchState==='生效中'?'green':r.branchState==='已达上限退出'?'orange':'gray')}<div class="sub">${esc(r.branchDetail)}</div></td><td>${r.updated}</td><td><div class="row-actions"><button class="btn small" onclick="openObject('${r.id}')">查看详情</button><button class="btn small" onclick="openLogsForObject('${r.id}')">回传记录</button></div></td></tr>`).join('') || `<tr><td colspan="8"><div class="sub">暂无符合当前筛选条件的运行对象</div></td></tr>`}</tbody></table>`;
 }
 function renderRuntimeFilters(){
   const box=$('runtimeFilters'); if(!box)return;
@@ -896,11 +914,11 @@ function renderObject(){
   $('objectBody').innerHTML=`
     <div class="summary-grid">
       <div class="summary-card"><b>当前阶段</b><div>${obj.stage}</div><div class="sub">${obj.progress}</div></div>
-      <div class="summary-card"><b>主线当前配置</b><div>转化事件：加企微好友</div><div class="sub">阶段流转目标 30，扣量每 3 条最后 1 条不回传</div></div>
-      <div class="summary-card"><b>命中分支</b><div>${obj.branch==='无'?tag('无','gray'):tag(obj.branch,'orange')}</div><div class="sub">同一业务转化事件只执行最高优先级</div></div>
+      <div class="summary-card"><b>主线当前配置</b><div>转化事件：加企微好友</div><div class="sub">覆盖主线时冻结进度与事件发生数；恢复后仅计算新事件</div></div>
+      <div class="summary-card"><b>分支运行状态</b><div>${tag(obj.branchState,obj.branchState==='生效中'?'green':obj.branchState==='已达上限退出'?'orange':'gray')}</div><div class="sub">${esc(obj.branchDetail)}</div></div>
     </div>
     <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>阶段流转记录</b></div><table><thead><tr><th>时间</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>2026-07-03 10:34</td><td>${tag('配置变更后自动流转','cyan')}</td><td>因策略配置变更自动触发，从第 2 阶段进入第 3 阶段</td></tr><tr><td>2026-07-03 09:10</td><td>${tag('阶段流转','green')}</td><td>数量达标后进入第 2 阶段</td></tr></tbody></table></div>
-    <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>分支命中记录</b></div><table><thead><tr><th>时间</th><th>分支</th><th>业务转化事件</th><th>状态</th><th>执行方式</th></tr></thead><tbody><tr><td>10:20</td><td>P1 成本异常收紧</td><td>加企微好友</td><td>${tag('生效中','green')}</td><td>覆盖主线</td></tr><tr><td>10:20</td><td>P2 深层达标补互动</td><td>有效开口</td><td>${tag('生效中','green')}</td><td>与主线并行</td></tr><tr><td>10:20</td><td>P3 同事件备用收紧</td><td>加企微好友</td><td>${tag('未执行','gray')}</td><td>同事件优先级低于 P1</td></tr></tbody></table></div>
+    <div class="card table" style="margin-top:14px"><div style="padding:12px 12px 0"><b>分支运行记录</b></div><table><thead><tr><th>时间</th><th>分支</th><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>10:20</td><td>P1 成本异常收紧</td><td>${tag('已达上限退出','orange')}</td><td>达到 120 条上限；主线仍冻结，下次重置 02:00</td></tr><tr><td>02:00</td><td>P1 成本异常收紧</td><td>${tag('计数重置','cyan')}</td><td>到达每日整点后清零；若触发条件仍满足则自动重入</td></tr><tr><td>10:20</td><td>P2 深层达标补互动</td><td>${tag('未执行','gray')}</td><td>被更高优先级分支 P1 抑制</td></tr></tbody></table></div>
   `;
 }
 function renderLogs(){
@@ -909,10 +927,10 @@ function renderLogs(){
   selectedLogIds=selectedLogIds.filter(id=>rows.some(l=>l.id===id));
   $('logBox').innerHTML=`
     <div class="toolbar between" style="padding:12px">
-      <div class="sub">已选择 ${selectedLogIds.length} 条；手动回传会按所选记录重新上报。</div>
+      <div class="sub">已选择 ${selectedLogIds.length} 条；同一批次仅支持同一平台，需重新选择平台转化类型。</div>
       <button class="btn primary" onclick="manualReportSelected()" ${selectedLogIds.length?'':'disabled'}>批量手动回传</button>
     </div>
-    <table><thead><tr><th><input type="checkbox" onchange="toggleAllLogs(this.checked)" ${rows.length&&selectedLogIds.length===rows.length?'checked':''}></th><th>事件时间</th><th>对象类型</th><th>对象</th><th>策略组名称</th><th>策略版本</th><th>当前阶段</th><th>命中分支</th><th>业务事件</th><th>AppName</th><th>配置来源</th><th>状态</th><th>状态明细</th><th>操作</th></tr></thead><tbody>${rows.map(l=>`<tr><td><input type="checkbox" ${selectedLogIds.includes(l.id)?'checked':''} onchange="toggleLog('${l.id}',this.checked)"></td><td>${l.time}</td><td>${l.objectType}</td><td>${esc(l.object)}</td><td><button class="btn small" onclick="openStrategy('${l.strategy}')">${esc(l.strategyName)}</button></td><td>${l.version}</td><td>${l.stage}</td><td>${l.branch}</td><td>${l.event}</td><td>${l.appName}</td><td>${l.source}</td><td>${tag(l.status,l.status==='成功'?'green':l.status==='未命中策略'?'gray':'orange')}</td><td>${l.reason}</td><td><button class="btn small" onclick="showLogDetail('${l.id}')">详情</button></td></tr>`).join('') || `<tr><td colspan="14"><div class="sub">暂无符合当前筛选条件的回传记录</div></td></tr>`}</tbody></table>`;
+    <table><thead><tr><th><input type="checkbox" onchange="toggleAllLogs(this.checked)" ${rows.length&&selectedLogIds.length===rows.length?'checked':''}></th><th>事件时间</th><th>对象类型</th><th>对象</th><th>策略组名称</th><th>策略版本</th><th>当前阶段</th><th>命中分支</th><th>业务事件</th><th>AppName</th><th>配置来源</th><th>状态</th><th>状态明细</th><th>操作</th></tr></thead><tbody>${rows.map(l=>`<tr><td><input type="checkbox" ${selectedLogIds.includes(l.id)?'checked':''} onchange="toggleLog('${l.id}',this.checked)"></td><td>${l.time}</td><td>${l.objectType}</td><td>${esc(l.object)}</td><td><button class="btn small" onclick="openStrategy('${l.strategy}')">${esc(l.strategyName)}</button></td><td>${l.version}</td><td>${l.stage}</td><td>${l.branch}</td><td>${l.event}</td><td>${l.appName}</td><td>${l.source}</td><td>${tag(l.status,l.status==='成功'?'green':l.status==='等待中'?'cyan':l.status==='未命中策略'?'gray':'orange')}</td><td>${l.reason}</td><td><button class="btn small" onclick="showLogDetail('${l.id}')">详情</button></td></tr>`).join('') || `<tr><td colspan="14"><div class="sub">暂无符合当前筛选条件的回传记录</div></td></tr>`}</tbody></table>`;
 }
 function renderLogFilters(){
   const box=$('logFilters'); if(!box) return;
@@ -957,21 +975,25 @@ function clearLogFilters(){logFilters={strategyGroups:[],versions:[],objectTypes
 function toggleLog(id,checked){selectedLogIds=toggleValue(selectedLogIds,id,checked);renderLogs()}
 function toggleAllLogs(checked){selectedLogIds=checked?filteredLogs().map(l=>l.id):[];renderLogs()}
 function manualReportSelected(){
-  const count=selectedLogIds.length;
+  const selected=logs.filter(l=>selectedLogIds.includes(l.id)), count=selected.length;
   if(!count)return;
+  const platforms=unique(selected.map(l=>l.platform));
+  if(platforms.length!==1){toast('批量手动回传仅允许勾选同一投放平台记录');return}
+  const platform=platforms[0]; manualConversionType='';
   $('modalTitle').textContent='确认手动回传';
-  $('modalBody').innerHTML=`<div class="preview-box">将对已勾选的 ${count} 条回传记录重新上报。原记录保留不覆盖，系统会新增手动回传记录，用于保留完整审计链路。</div>`;
+  $('modalBody').innerHTML=`<div class="preview-box">将对已勾选的 ${count} 条${platform}回传记录重新上报。原记录保留不覆盖，系统会新增手动回传记录，用于保留完整审计链路。</div><div class="field" style="margin-top:14px"><label>平台转化类型 <span style="color:#e11d48">*</span></label><select class="select" onchange="manualConversionType=this.value"><option value="">请选择${platform}平台转化类型</option>${conversionTypes[platform].map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select></div>`;
   $('modalFoot').innerHTML='<button class="btn" onclick="closeModal()">取消</button><button class="btn primary" onclick="confirmManualReport()">确认回传</button>';
   $('modalMask').classList.add('show');$('modal').classList.add('show');
 }
 function confirmManualReport(){
   const selected=logs.filter(l=>selectedLogIds.includes(l.id));
-  selected.forEach((l,i)=>logs.unshift({...l,id:`manual-${Date.now()}-${i}`,time:'2026-07-06 现在',source:'手动回传',status:'成功',reason:'手动回传成功',originId:l.id}));
+  if(!manualConversionType){toast('请先选择平台转化类型');return}
+  selected.forEach((l,i)=>logs.unshift({...l,id:`manual-${Date.now()}-${i}`,time:'2026-07-17 现在',source:'手动回传',status:'成功',reason:'手动回传成功',manualConversion:manualConversionType,originId:l.id}));
   const count=selected.length;selectedLogIds=[];closeModal();renderLogs();toast(`已新增 ${count} 条手动回传成功记录`);
 }
 function showLogDetail(id){
   const l=logs.find(item=>item.id===id)||logs[0];
-  $('modalTitle').textContent='回传详情';$('modalBody').innerHTML=`<div class="split"><div><h3>命中配置</h3><div class="preview-box">策略组 ${l.strategy} ${l.version}；当前阶段：${l.stage}；业务事件：${l.event}；AppName：${l.appName}。</div></div><div><h3>判断结果</h3><div class="preview-box">回传控制、语料标签、用户属性、设备、AppName 筛选逐项展示；状态明细：${l.reason}。</div></div></div>`;$('modalFoot').innerHTML='<button class="btn primary" onclick="closeModal()">知道了</button>';$('modalMask').classList.add('show');$('modal').classList.add('show');
+  $('modalTitle').textContent='回传详情';$('modalBody').innerHTML=`<div class="split"><div><h3>命中配置</h3><div class="preview-box">策略组 ${l.strategy} ${l.version}；当前阶段：${l.stage}；业务事件：${l.event}；AppName：${l.appName}。${l.originId?`<br>原始记录：${l.originId}`:''}${l.manualConversion?`<br>手动选择转化类型：${l.manualConversion}`:''}</div></div><div><h3>判断结果</h3><div class="preview-box">状态：${l.status}；状态明细：${l.reason}。用户属性、扣量、窗口期、设备、AppName 与投放指标判断结果均可追溯。</div></div></div>`;$('modalFoot').innerHTML='<button class="btn primary" onclick="closeModal()">知道了</button>';$('modalMask').classList.add('show');$('modal').classList.add('show');
 }
 function closeModal(){$('modalMask').classList.remove('show');$('modal').classList.remove('show')}
 function renderConfig(){
