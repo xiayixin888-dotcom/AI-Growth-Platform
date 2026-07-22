@@ -181,14 +181,16 @@ const corpusTags=[
   ['平台语料分析_户型偏好','一室、二室、三室、四室、五室、六室、六室以上'],
   ['平台语料分析_业务偏好','新房、二手房']
 ];
-const metricFields=['广告消耗','广告点击','广告转化数','广告转化成本','落地页点击数','落地页点击率','加粉数','加粉成本','加粉率','开口数','开口成本','开口率'];
+const adAndAccountMetricFields=['广告消耗','广告点击','广告转化数','广告转化成本','落地页点击数','落地页点击率','加粉数','加粉成本','加粉率','开口数','开口成本','开口率'];
+const landingPageMetricFields=['落地页点击数','落地页点击率','加粉数','加粉率','开口数','开口率'];
+function metricFieldsForScope(scope){return scope==='落地页'?landingPageMetricFields:adAndAccountMetricFields}
 const userAttributeFields=['新用户','老用户','落地页停留时间','加好友后未解除关系时长','加好友后多少时间内开口'];
 const landingEvent='点击或长按落地页组件';
 const conditionPools={
   stageCondition:{'事件数量达标':events,'时间段':['生效时段']},
   corpus:{'语料标签':corpusTags.map(i=>i[0])},
   userAttribute:{'用户属性':userAttributeFields},
-  branch:{'策略状态':['当前阶段'],'时间段':['生效时段'],'投放指标':metricFields}
+  branch:{'策略状态':['当前阶段'],'时间段':['生效时段'],'投放指标':adAndAccountMetricFields}
 };
 const deviceOptions=[];
 const appOptions=['aweme','aweme_lite','news_article','live_stream','novelapp','空值'];
@@ -212,21 +214,22 @@ let selectedType='stage', selectedIndex=0, currentStrategyId='RS-6001', configPl
 let logFilters={strategyGroups:[],versions:[],objectTypes:[],objects:[],events:[],statuses:[],reasons:[],appNames:[]}, selectedLogIds=[], manualConversionType='';
 
 function stageTpl(n,event='点击或长按落地页组件',target=20){
+  const isLandingEvent=event===landingEvent;
   return {
     name:`第 ${n} 阶段`,desc:'',event,conversion:conversionTypes['巨量'][0],
     targetStage:`第 ${n+1} 阶段`,
     conditionRows:[{category:'事件数量达标',field:event,countType:'成功回传数',op:'>=',value:target,logic:'或'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'或'}],conditionLogic:'或',
-    corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
-    userRows:[{category:'用户属性',field:'新用户',op:'=',value:'是'}],userLogic:'且',
+    corpusRows:isLandingEvent?[]:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],corpusLogic:'且',
+    userRows:isLandingEvent?[]:[{category:'用户属性',field:'新用户',op:'=',value:'是'}],userLogic:'且',
     devices:[],apps:['aweme_lite'],
     deduct:{enabled:true,expanded:false,m:3,n:1},
     windowDays:event==='加企微群'||event==='会话线索'?7:'',windowHours:event==='有效开口'?24:''
   };
 }
-function branchTpl(n,name=`P${n} 成本异常覆盖`){
+function branchTpl(n,name=`P${n} 成本异常覆盖`,metricScope='广告'){
   return {
     name,enabled:true,mode:n===2?'与主线并行':'覆盖主线',
-    conditions:[{category:'策略状态',field:'当前阶段',op:'=',value:n===2?'第 3 阶段':'第 2 阶段',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'},{category:'投放指标',field:'广告转化成本',window:'当日累计',windowHours:3,op:'>=',value:'180',logic:'且'}],logic:'且',
+    conditions:[{category:'策略状态',field:'当前阶段',op:'=',value:n===2?'第 3 阶段':'第 2 阶段',logic:'且'},{category:'时间段',field:'生效时段',op:'在时间段内',value:'09:00-18:00',start:'09:00',end:'18:00',logic:'且'},{category:'投放指标',field:metricFieldsForScope(metricScope)[0],window:'当日累计',windowHours:3,op:'>=',value:'180',logic:'且'}],logic:'且',
     event:n===2?'有效开口':'加企微好友',conversion:n===2?conversionTypes['巨量'][3]:conversionTypes['巨量'][1],
     corpusRows:[{category:'语料标签',field:'平台语料分析_业务偏好',op:'包含',value:'新房'}],
     userRows:[{category:'用户属性',field:'加好友后未解除关系时长',op:'>=',value:'30'}],
@@ -241,7 +244,7 @@ function branchTpl(n,name=`P${n} 成本异常覆盖`){
 let strategies=[
   {id:'RS-6001',name:'巨量冷启到有效开口策略',platform:'巨量',scope:'广告',objectItems:objectOptions['广告'].slice(),objects:'12 个广告',version:7,status:'启用',updated:'2026-07-17 10:18',isTemplate:true,templateName:'冷启到有效开口标准模板',copyCount:18,creator:'Admin',stages:[stageTpl(1,'点击或长按落地页组件',50),stageTpl(2,'加企微好友',30),stageTpl(3,'有效开口',9999)],branches:[branchTpl(1,'P1 成本异常收紧'),branchTpl(2,'P2 深层达标补互动'),branchTpl(3,'P3 同事件备用收紧')]},
   {id:'RS-6002',name:'百度账户加粉质量策略',platform:'百度',scope:'账户',objectItems:objectOptions['账户'].slice(),objects:'3 个账户',version:3,status:'启用',updated:'2026-07-03 09:42',isTemplate:false,templateName:'',copyCount:0,creator:'运营A',stages:[stageTpl(1,'点击或长按落地页组件',20),stageTpl(2,'有效开口',9999)],branches:[branchTpl(1,'P1 账户成本异常')]},
-  {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',version:2,status:'停用',updated:'2026-07-02 18:20',isTemplate:true,templateName:'会话线索回传模板',copyCount:6,creator:'运营B',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传')]}
+  {id:'RS-6003',name:'腾讯落地页会话线索策略',platform:'腾讯',scope:'落地页',objectItems:objectOptions['落地页'].slice(),objects:'8 个落地页',version:2,status:'停用',updated:'2026-07-02 18:20',isTemplate:true,templateName:'会话线索回传模板',copyCount:6,creator:'运营B',stages:[stageTpl(1,'点击或长按落地页组件',30),stageTpl(2,'会话线索',9999)],branches:[branchTpl(1,'P1 指定落地页并行回传','落地页')]}
 ];
 let strategyFilters={names:[],platforms:[],scopes:[],statuses:[],objects:[]};
 let templateFilters={keyword:'',platforms:[]};
@@ -454,7 +457,14 @@ function setTemplateFlag(checked){
   renderStrategyDetail();
 }
 function updateStrategyScope(value){
-  const s=strategy(); s.scope=value; s.objectItems=objectOptions[value].slice(); s.objects=objectSummary(s); renderStrategyDetail();
+  const s=strategy();
+  if(value===s.scope){renderStrategyDetail();return}
+  if(value==='落地页'&&s.scope!=='落地页'){
+    const invalid=s.branches.flatMap((b,branchIndex)=>b.conditions.map((condition,conditionIndex)=>({branchIndex,conditionIndex,condition})).filter(item=>item.condition.category==='投放指标'&&!landingPageMetricFields.includes(item.condition.field)));
+    if(invalid.length&&!confirm(`切换为落地页后将清空 ${invalid.length} 条不适用的投放指标条件（广告消耗、广告点击、广告转化及成本类指标）。清空后分支条件为空时，需在保存前补充有效条件。是否继续？`)){renderStrategyDetail();return}
+    if(invalid.length)s.branches.forEach(b=>{b.conditions=b.conditions.filter(condition=>condition.category!=='投放指标'||landingPageMetricFields.includes(condition.field))});
+  }
+  s.scope=value; s.objectItems=objectOptions[value].slice(); s.objects=objectSummary(s); renderStrategyDetail();
 }
 function objectMultiSelect(s){
   const selected=s.objectItems||[];
@@ -481,8 +491,26 @@ function renderBranchList(){
 }
 function selectNode(type,i){selectedType=type;selectedIndex=i;renderStrategyDetail()}
 function updateStage(key,value){const st=strategy().stages[selectedIndex];st[key]=value;renderStrategyDetail()}
-function removeFriendRetention(rows){return (rows||[]).filter(r=>r.field!=='加好友后未解除关系时长')}
-function setStageEvent(value){const st=strategy().stages[selectedIndex];st.event=value;if(value===landingEvent)st.userRows=removeFriendRetention(st.userRows);const types=conversionTypes[strategy().platform];st.conversion=types[events.indexOf(value)]||types[0];renderStrategyDetail()}
+function landingEventUserRows(rows){return (rows||[]).filter(r=>r.field==='落地页停留时间')}
+function landingEventCleanupSummary(config){return {corpus:(config.corpusRows||[]).length,user:(config.userRows||[]).filter(r=>r.field!=='落地页停留时间').length}}
+function applyEventChange(config,value){
+  if(value===landingEvent&&config.event!==landingEvent){
+    const removed=landingEventCleanupSummary(config);
+    if(removed.corpus||removed.user){
+      const parts=[];
+      if(removed.corpus)parts.push(`${removed.corpus} 条语料标签条件`);
+      if(removed.user)parts.push(`${removed.user} 条不适用用户属性条件`);
+      if(!confirm(`“点击或长按落地页组件”仅支持落地页停留时间、设备筛选和 AppName 排除。切换后将清空${parts.join('和')}，是否继续？`))return false;
+      config.corpusRows=[];
+      config.userRows=landingEventUserRows(config.userRows);
+    }
+  }
+  config.event=value;
+  const types=conversionTypes[strategy().platform];
+  config.conversion=types[events.indexOf(value)]||types[0];
+  return true;
+}
+function setStageEvent(value){applyEventChange(strategy().stages[selectedIndex],value);renderStrategyDetail()}
 function renderEditor(){
   const s=strategy(); if(selectedType==='branch')return renderBranchEditor();
   const st=s.stages[selectedIndex]; if(!st){$('editorForm').innerHTML='<div class="sub">该策略组暂无阶段，点击左侧新增阶段。</div>';return}
@@ -508,8 +536,8 @@ function renderEditor(){
     </div>
     <div class="form-section"><h3>筛选条件</h3>
       <div class="filter-grid">
-        ${filterBox('语料标签筛选',st.corpusRows.length,conditionBuilder(st.corpusRows,'corpus'),'corpus')}
-        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'),'userAttribute')}${st.event===landingEvent?'<div class="section-tip">落地页点击事件不支持“加好友后未解除关系时长”。</div>':''}
+        ${st.event===landingEvent?'':filterBox('语料标签筛选',st.corpusRows.length,conditionBuilder(st.corpusRows,'corpus'),'corpus')}
+        ${filterBox('用户属性筛选',st.userRows.length,conditionBuilder(st.userRows,'userAttribute'),'userAttribute')}${st.event===landingEvent?'<div class="section-tip">点击 / 长按发生在加好友前：仅可按落地页停留时间筛选。</div>':''}
         ${filterBox('设备筛选（UA 手机型号）',st.devices.length,deviceSelector(st))}
         ${filterBox('排除访问应用（UA 流量包名）',st.apps.length,appSelector(st))}
       </div>
@@ -565,7 +593,8 @@ function conditionPoolFor(type){
   const poolType=type==='branchCorpus'?'corpus':type==='branchUserAttribute'?'userAttribute':type;
   const pool=conditionPools[poolType]||conditionPools.stageCondition;
   const event=type==='branchUserAttribute'?(strategy().branches[selectedIndex]||{}).event:(strategy().stages[selectedIndex]||{}).event;
-  if(poolType==='userAttribute'&&event===landingEvent)return {...pool,'用户属性':pool['用户属性'].filter(field=>field!=='加好友后未解除关系时长')};
+  if(poolType==='branch')return {...pool,'投放指标':metricFieldsForScope(strategy().scope)};
+  if(poolType==='userAttribute'&&event===landingEvent)return {...pool,'用户属性':['落地页停留时间']};
   return pool;
 }
 function conditionBuilder(rows,type){
@@ -737,7 +766,7 @@ function deleteStage(index){
   renderStrategyDetail();
   toast('已删除阶段，保存后生效');
 }
-function addBranch(){const s=strategy();s.branches.push(branchTpl(s.branches.length+1));selectedType='branch';selectedIndex=s.branches.length-1;renderStrategyDetail()}
+function addBranch(){const s=strategy();s.branches.push(branchTpl(s.branches.length+1,undefined,s.scope));selectedType='branch';selectedIndex=s.branches.length-1;renderStrategyDetail()}
 function deleteBranch(index){
   const s=strategy();
   if(!confirm('确认删除该分支？删除后该分支的触发条件和回传配置都会移除。'))return;
@@ -782,18 +811,14 @@ function moveBranch(index,delta){
   [s.branches[index],s.branches[next]]=[s.branches[next],s.branches[index]];
   selectedType='branch'; selectedIndex=next; renderStrategyDetail();
 }
-function setBranchEvent(value){
-  const b=strategy().branches[selectedIndex]; b.event=value;if(value===landingEvent)b.userRows=removeFriendRetention(b.userRows);
-  const types=conversionTypes[strategy().platform]; b.conversion=types[events.indexOf(value)]||types[0];
-  renderStrategyDetail();
-}
+function setBranchEvent(value){applyEventChange(strategy().branches[selectedIndex],value);renderStrategyDetail()}
 function branchReturnEditor(b,s){
   const special=eventSpecial[b.event];
   return `<div class="form">
     ${field('转化事件',selectHtml(events,b.event,`setBranchEvent(this.value)`))}
     ${field('平台转化类型',selectHtml(conversionTypes[s.platform],b.conversion,`setBranch('conversion',this.value)`))}
-    <div class="field span2">${conditionPanel('语料标签筛选',b.corpusRows.length,'branchCorpus',conditionBuilder(b.corpusRows,'branchCorpus'))}</div>
-    <div class="field span2">${conditionPanel('用户属性筛选',b.userRows.length,'branchUserAttribute',conditionBuilder(b.userRows,'branchUserAttribute'))}${b.event===landingEvent?'<div class="section-tip">落地页点击事件不支持“加好友后未解除关系时长”。</div>':''}</div>
+    ${b.event===landingEvent?'':`<div class="field span2">${conditionPanel('语料标签筛选',b.corpusRows.length,'branchCorpus',conditionBuilder(b.corpusRows,'branchCorpus'))}</div>`}
+    <div class="field span2">${conditionPanel('用户属性筛选',b.userRows.length,'branchUserAttribute',conditionBuilder(b.userRows,'branchUserAttribute'))}${b.event===landingEvent?'<div class="section-tip">点击 / 长按发生在加好友前：仅可按落地页停留时间筛选。</div>':''}</div>
     ${field('设备筛选（UA 手机型号）',branchDeviceSelector(b))}
     ${field('排除访问应用（UA 流量包名）',branchAppSelector(b))}
     ${field('扣量策略',branchDeductEditor(b),'span2')}
